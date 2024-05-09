@@ -110,7 +110,7 @@ public class LearningGraphics extends JComponent implements KeyListener, MouseLi
         Font font = new Font("Arial", Font.BOLD, 50);
         g.setFont(font);
         g.setColor(Color.BLACK);
-        g.drawString("Hello World!!", WIDTH - 500, HEIGHT - 250);
+        g.drawString("Hello World!!", WIDTH / 2, HEIGHT / 2);
         //Drawing the user-controlled rectangle
         g.setColor(Color.RED);
         g.fillRect(rX, rY, rW, rH);
@@ -203,7 +203,7 @@ public class LearningGraphics extends JComponent implements KeyListener, MouseLi
         {
             for(int y = rY; y <= rY + rH; y++)
             {
-                if(distance(x, y, centerX, centerY) <= radius)
+                if(distance(x, y, centerX, centerY) < radius)
                 {
                     output = true;
                 }
