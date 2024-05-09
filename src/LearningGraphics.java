@@ -203,7 +203,7 @@ public class LearningGraphics extends JComponent implements KeyListener, MouseLi
         {
             for(int y = rY; y <= rY + rH; y++)
             {
-                if(distance(x, y, centerX, centerY) < radius)
+                if(distance(x, y, centerX, centerY) <= radius)
                 {
                     output = true;
                 }
