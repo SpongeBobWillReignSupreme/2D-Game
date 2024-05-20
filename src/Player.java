@@ -10,7 +10,6 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
-import java.awt.Font;
 
 
 public class Player extends JComponent implements KeyListener, MouseListener, MouseMotionListener
@@ -18,10 +17,13 @@ public class Player extends JComponent implements KeyListener, MouseListener, Mo
     //instance variables
     private int WIDTH;
     private int HEIGHT;
-    private int rX;
-    private int rY;
-    private int rW;
-    private int rH;
+    private int bX;
+    private int bY;
+    private int bW;
+    private int bH;
+    private int vX;
+    private int vY;
+    private boolean isJumping;
 
     //Default Constructor
     public Player()
@@ -29,10 +31,13 @@ public class Player extends JComponent implements KeyListener, MouseListener, Mo
         //initializing instance variables
         WIDTH = 1000;
         HEIGHT = 500;
-        rX = 300;
-        rY = 300;
-        rW = 50;
-        rH = 100;
+        bX = 300;
+        bY = 300;
+        bW = 50;
+        bH = 100;
+        vX = 0;
+        vY = 0;
+        isJumping = false;
 
         //Setting up the GUI
         JFrame gui = new JFrame(); //This makes the gui box
@@ -63,19 +68,19 @@ public class Player extends JComponent implements KeyListener, MouseListener, Mo
         //moving the rectangle
         if(key == 38)
         {
-            rY -= 10;
+            bY -= 10;
         }
         else if(key == 40)
         {
-            rY += 10;
+            bY += 10;
         }
         else if(key == 37)
         {
-            rX -= 10;
+            bX -= 10;
         }
         else if(key == 39)
         {
-            rX += 10;
+            bX += 10;
         }
     }
     //All your UI drawing goes in here
@@ -83,7 +88,7 @@ public class Player extends JComponent implements KeyListener, MouseListener, Mo
     {
         // Drawing the body of the player
         g.setColor(Color.ORANGE);
-        g.fillRect(rX - 230, rY + 20, rW, rH);
+        g.fillRect(bX - 230, bY + 20, bW, bH);
         //Drawing Hello World!! at the center of the GUI
 
         //Drawing the user-controlled rectangle
