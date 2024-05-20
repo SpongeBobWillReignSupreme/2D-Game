@@ -1,5 +1,5 @@
 package src;
 
-public class GameRunner8B  {
-
+public class GameRunner8B
+{
 }
