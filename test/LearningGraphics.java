@@ -1,4 +1,4 @@
-package src;
+package test;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -76,7 +76,7 @@ public class LearningGraphics extends JComponent implements KeyListener, MouseLi
         gui.addMouseMotionListener(this); // stating that this object will acknowledge mouse movement
     }
 
-    //This method will acknowledge user input
+    // This method will acknowledge user input
     public void keyPressed(KeyEvent e)
     {
         //getting the key pressed
