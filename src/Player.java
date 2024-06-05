@@ -1,160 +1,257 @@
 package src;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
 
 
-public class Player extends JComponent implements KeyListener, MouseListener, MouseMotionListener
+public class Player extends JComponent
 {
     //instance variables
-    private int WIDTH;
-    private int HEIGHT;
-    private int bX;
-    private int bY;
-    private int bW;
-    private int bH;
+    private int pX;
+    private int pY;
+    private int pW;
+    private int pH;
+    //private int hX;
+    //private int hY;
+    //private int diam;
     private int vX;
     private int vY;
     private boolean isJumping;
+    private boolean onPlat;
+    private Color color;
 
     //Default Constructor
     public Player()
     {
         //initializing instance variables
-        WIDTH = 1000;
-        HEIGHT = 500;
-        bX = 300;
-        bY = 300;
-        bW = 50;
-        bH = 100;
+        pX = 70;
+        pY = 335;
+        pW = 50;
+        pH = 100;
+        //hX = 70;
+        //hY = 288;
+        //diam = 50;
         vX = 0;
         vY = 0;
         isJumping = false;
-
-        //Setting up the GUI
-        JFrame gui = new JFrame(); //This makes the gui box
-        gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //Makes sure program can close
-        gui.setTitle("Learning Graphics"); //This is the title of the game, you can change it
-        gui.setPreferredSize(new Dimension(WIDTH + 5, HEIGHT + 30)); //Setting the size for gui
-        gui.setResizable(false); //Makes it so the gui cant be resized
-        gui.getContentPane().add(this); //Adding this class to the gui
-
-        /*If after you finish everything, you can declare your buttons or other things
-         *at this spot. AFTER gui.getContentPane().add(this) and BEFORE gui.pack();
-         */
-
-        gui.pack(); //Packs everything together
-        gui.setLocationRelativeTo(null); //Makes so the gui opens in the center of screen
-        gui.setVisible(true); //Makes the gui visible
-        gui.addKeyListener(this);//stating that this object will listen to the keyboard
-        gui.addMouseListener(this); //stating that this object will listen to the Mouse
-        gui.addMouseMotionListener(this); //stating that this object will acknowledge when the Mouse moves
-
+        onPlat = false;
+        color = Color.ORANGE;
     }
-    //This method will acknowledge user input
-    public void keyPressed(KeyEvent e)
+
+    public int getWidth()
     {
-        //getting the key pressed
+        return pW;
+    }
+    public int getHeight()
+    {
+        return pH;
+    }
+    public int getX()
+    {
+        return pX;
+    }
+    public int getY()
+    {
+        return pY;
+    }
+    /*public int getHeadX()
+    {
+        return hX;
+    }
+    public int getHeadY()
+    {
+        return hY;
+    }
+    public int getDiam()
+    {
+        return diam;
+    }*/
+    public int getVX()
+    {
+        return vX;
+    }
+    public int getVY()
+    {
+        return vY;
+    }
+    public boolean getIsJumping()
+    {
+        return isJumping;
+    }
+    public void setColor(Color c)
+    {
+        color = c;
+    }
+    public void setX(int x)
+    {
+        pX = x;
+    }
+    public void setY(int y)
+    {
+        pY = y;
+    }
+    public void setVY(int yVel)
+    {
+        vY = yVel;
+    }
+    public void setVX(int xVel)
+    {
+        vX = xVel;
+    }
+
+    public void movePlayer(KeyEvent e)
+    {
         int key = e.getKeyCode();
-        System.out.println(key);
-        //moving the rectangle
-        if(key == 38)
+        if(key == 37)
         {
-            bY -= 10;
-        }
-        else if(key == 40)
-        {
-            bY += 10;
-        }
-        else if(key == 37)
-        {
-            bX -= 10;
+            //pX -= 10;
+            //hX -= 10;
+            vX = -10;
         }
         else if(key == 39)
         {
-            bX += 10;
+            //pX += 10;
+            //hX += 10;
+            vX = 10;
+        }
+        /*else if(key == 38)
+        {
+            //vY = -10;
+        }*/
+        if(key == 38)//up
+        {
+            if(!isJumping && vY == 0)
+            {
+                vY = -30;
+                isJumping = true;
+                onPlat = false;
+            }
+        }
+        //  movement();
+    }
+    public void stopHorizontal(KeyEvent e)
+    {
+        int key = e.getKeyCode();
+        if(key == 37)
+        {
+            //pX -= 10;
+            //hX -= 10;
+            vX = 0;
+        }
+        else if(key == 39)
+        {
+            //pX += 10;
+            //hX += 10;
+            vX = 0;
         }
     }
-    //All your UI drawing goes in here
-    public void paintComponent(Graphics g)
+    public void movement(int floor, Platform plat, KeyEvent e)
     {
-        // Drawing the body of the player
-        g.setColor(Color.ORANGE);
-        g.fillRect(bX - 230, bY + 20, bW, bH);
-        //Drawing Hello World!! at the center of the GUI
+        pX += vX;
+        pY += vY;
+        //hX += vX;
+        //hY += vY;
+        System.out.println(vY);
 
-        //Drawing the user-controlled rectangle
 
-        //Drawing the autonomous circle
+        if(vY > 0 && pY + pH >= plat.getY() && pY + pH <= plat.getY() + plat.getHeight() && (pX >= plat.getX() && pX <= plat.getX() + plat.getWidth() - 5 || pX + pW >= plat.getX() + 5 && pX + pW <= plat.getX() + plat.getWidth()))
+        {
+            vY = 0;
+            pY = plat.getY() - pH;
+            isJumping = false;
+            onPlat = true;
+        }
+        else
+            onPlat = false;
 
-    }
-    public void loop()
-    {
-        //making the autonomous circle move
 
-        //handling when the circle collides with the edges
+        if(pY + pH >= floor && !onPlat)//landing on the floor
+        {
+            System.out.println("on floor");
+            vY = 0;
+            pY = floor - pH;
+            isJumping = false;
+        }
 
-        //handling the collision of the circle with the rectangle
+        else if(!onPlat)
+        {
+            vY++;
+        }
 
-        //Do not write below this
-        repaint();
+        int key = e.getKeyCode();
+        if(key != 37 && key != 39 && pY + pH >= floor);
+        {
+            vX = 0;
+        }
     }
-    //These methods are required by the compiler.
-    //You might write code in these methods depending on your goal.
-    public void keyTyped(KeyEvent e)
+    public void movement(int floor, ArrayList<Platform> plats)
     {
-    }
-    public void keyReleased(KeyEvent e)
-    {
-    }
-    public void mousePressed(MouseEvent e)
-    {
-    }
-    public void mouseReleased(MouseEvent e)
-    {
-    }
-    public void mouseClicked(MouseEvent e)
-    {
-    }
-    public void mouseEntered(MouseEvent e)
-    {
-    }
-    public void mouseExited(MouseEvent e)
-    {
-    }
-    public void mouseMoved(MouseEvent e)
-    {
-    }
-    public void mouseDragged(MouseEvent e)
-    {
-    }
-    public void start(final int ticks){
-        Thread gameThread = new Thread(){
-            public void run(){
-                while(true){
-                    loop();
-                    try{
-                        Thread.sleep(1000 / ticks);
-                    }catch(Exception e){
-                        e.printStackTrace();
-                    }
-                }
+        pX += vX;
+        pY += vY;
+        //hX += vX;
+        //hY += vY;
+        //System.out.println(vY);
+
+        //use a loop to go through all of the platforms in plats and check if this is true for any of them.  If so exit loop.
+        for(int i = 0; i < plats.size(); i++)
+        {
+            Platform plat = plats.get(i);
+            if (vY > 0 && pY + pH >= plat.getY() && pY + pH <= plat.getY() + plat.getHeight() && (pX >= plat.getX() && pX <= plat.getX() + plat.getWidth() - 5 || pX + pW >= plat.getX() + 5 && pX + pW <= plat.getX() + plat.getWidth()))
+            {
+                vY = 0;
+                pY = plat.getY() - pH;
+                isJumping = false;
+                onPlat = true;
+                i = plats.size();
             }
-        };
-        gameThread.start();
+            else
+            {
+                onPlat = false;
+            }
+
+            if (pY + pH >= floor && !onPlat)//landing on the floor
+            {
+                System.out.println("on floor");
+                vY = 0;
+                if(vX != -10 && vX != 10)
+                {
+                    vX = 0;
+                }
+                pY = floor - pH;
+                isJumping = false;
+            }
+            else if (!onPlat)
+            {
+
+                vY++;
+            }
+        }
     }
 
-    public static void main(String[] args)
+    //All your UI drawing goes in here
+    public void drawPlayer(Graphics g) {
+        // Drawing the body of the player
+        g.setColor(color);
+        g.fillRect(pX, pY, pW, pH);
+        // Drawing the head of the player
+        //g.fillOval(hX, hY, diam, diam);
+    }
+    public void handleCollision(int fHeight)
     {
-        Player g = new Player();
-        g.start(60);
+        if(pY + pH <= fHeight)
+        {
+            //v
+        }
+    }
+    public void jump(int h)
+    {
+        if(!isJumping)
+        {
+            vY = -20;
+            isJumping = true;
+        }
     }
 }
