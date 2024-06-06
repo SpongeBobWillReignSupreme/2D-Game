@@ -23,6 +23,7 @@ public class Player extends JComponent
     private boolean onPlat;
     private Color color;
 
+
     //Default Constructor
     public Player()
     {
@@ -56,6 +57,10 @@ public class Player extends JComponent
     public int getY()
     {
         return pY;
+    }
+    public Color getColor()
+    {
+        return color;
     }
     /*public int getHeadX()
     {

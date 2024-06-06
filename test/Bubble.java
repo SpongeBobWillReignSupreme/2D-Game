@@ -49,6 +49,7 @@ public class Bubble
     {
         return y + diam / 2;
     }
+
     public void act(int w, int h)
     {
         //get the next x and y coordinates

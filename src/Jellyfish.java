@@ -2,6 +2,7 @@ package src;
 
 import java.awt.Graphics;
 import java.awt.Color;
+import java.util.ArrayList;
 
 public class Jellyfish
 {
@@ -11,12 +12,12 @@ public class Jellyfish
     private Color col;
 
 
-    public Jellyfish(int xC, int yC)
+    public Jellyfish(int xC, int yC, Color c)
     {
         x = xC;
         y = yC;
         diam = 50;
-        col = Color.PINK;
+        col = c;
     }
 
     public String toString()
@@ -51,17 +52,27 @@ public class Jellyfish
         }
         return false; //we didn't touch
     }
-   /* public void checkStomp(Player p, ArrayList<Jellyfish> jellies)
+    /* public void checkTouch(Player p, ArrayList<Jellyfish> jellies)
+     {
+         for(int i = 0; i < jellies.size(); i++)
+         {
+             Jellyfish jelly = jellies.get(i);
+             if(p.getX() + p.getWidth() >= x + 5 && p.getX() <= x + diam - 5 && p.getY() + p.getHeight() >= y && p.getY() <= y + diam)
+             {
+                 jellies.remove(i);
+                 System.out.println("Touched jelly");
+             }
+         }
+     }*/
+    public boolean blue(Jellyfish b, Player p)
     {
-        for(int i = 0; i < jellies.size(); i++)
+        if(b.checkTouch(p) == true)
         {
-            Jellyfish jelly = jellies.get(i);
-            if(p.getX() + p.getWidth() >= x + 5 && p.getX() <= x + diam - 5 && p.getY() + p.getHeight() >= y && p.getY() <= y + diam)
-            {
-                jellies.remove(i);
-                System.out.println("Touched jelly");
-            }
+            return true;
         }
-    }*/
+        else
+        {
+            return false;
+        }
+    }
 }
-
