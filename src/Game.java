@@ -157,7 +157,9 @@
                 {
                     //just remove
                     enemies.remove(i);
+                    score += 50;
                 }
+
                 if(currentTime - lastLifeLostTime > 2100) // 2100 milliseconds = 2.1 seconds
                 {
 

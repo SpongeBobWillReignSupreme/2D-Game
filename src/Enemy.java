@@ -59,11 +59,17 @@ public class Enemy
     }
     public boolean checkStomp(Player p)
     {
-        //right side of player stomp
-        if(p.getX() + p.getWidth() >= eX + 5 && p.getX() + p.getWidth() <= eX + eW - 5 && p.getY() + p.getHeight() >= eY + 5 && p.getY() + (p.getHeight()/6) <= eY + 5 || p.getX() >= eX + 5 && p.getX() <= eX + eW - 5 && p.getY() + p.getHeight() >= eY + 5&& p.getY() + p.getHeight()/6 <= eY + eH)
+        // If the players right side is in between the x of the right and left side of the enemy; the players bottom is touching the top of the enemy(5 pixels of leeway); OR the players left side is in between the x of the right and left side of the enemy; the players bottom is touching the top of the enemy(5 pixels of leeway)
+        if(p.getX() + p.getWidth() >= eX + 5 && p.getX() + p.getWidth() <= eX + eW && p.getY() + p.getHeight() >= eY && p.getY() + p.getHeight() <= eY + 5 || p.getX() >= eX && p.getX() <= eX + eW + 5 && p.getY() + p.getHeight() >= eY && p.getY() + p.getHeight() <= eY + 5)
         {
-            p.setVY(-15);
-            p.setVX(-5);
+            if(eX > p.getX() && p.getVX() == 0)
+            {
+                p.setVX(-5);
+            }
+            else if(eX < p.getX() && p.getVX() == 0)
+            {
+                p.setVX(5);
+            }
             return true;
         }
         else
@@ -73,10 +79,18 @@ public class Enemy
     }
     public boolean checkTouch(Player p)
     {
-        if(p.getX() + p.getWidth() >= eX + 5 && p.getX() + p.getWidth() <= eX + eW - 5 && p.getY() + (p.getHeight() / 2) <= eY + eH && p.getY() + (p.getHeight() / 2) >= eY && p.getY() + p.getHeight() <= eY + eH)
+        if(p.getX() + p.getWidth() >= eX + 5 && p.getX() + p.getWidth() <= eX + eW && p.getY() + p.getHeight() / 2 <= eY + eH && p.getY() + p.getHeight() / 2 >= eY + 5 && p.getY() + (eY - p.getY()) + 5 >= eY && p.getY() + p.getHeight() <= eY + eH)
         {
             p.setVY(-15);
-            p.setVX(-5);
+
+            if(eX > p.getX() && p.getVX() == 0)
+            {
+                p.setVX(-5);
+            }
+            else if(eX < p.getX() && p.getVX() == 0)
+            {
+                p.setVX(5);
+            }
 
             return true;
         }
