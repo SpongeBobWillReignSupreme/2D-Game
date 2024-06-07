@@ -1,7 +1,6 @@
 package src;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.*;
 
 public class Enemy
 {
@@ -73,7 +72,7 @@ public class Enemy
     }
     public boolean checkTouch(Player p)
     {
-        if(p.getX() + p.getWidth() >= eX + 5 && p.getX() + p.getWidth() <= eX + eW - 5 && p.getY() + p.getHeight() / 2 <= eY + eH && p.getY() + p.getHeight() / 2 >= eY + 5 && p.getY() + (eY - p.getY()) + 5 >= eY && p.getY() + p.getHeight() <= eY + eH || p.getX() <= eX + eW - 5 && p.getX() >= eX + 5 && p.getY() + p.getHeight() / 2 <= eY + eH && p.getY() + p.getHeight() / 2 >= eY + 5 && p.getY() + (eY - p.getY()) + 5 >= eY && p.getY() + p.getHeight() <= eY + eH)
+        if(!p.getColor().equals(Color.RED) && p.getX() + p.getWidth() >= eX + 5 && p.getX() + p.getWidth() <= eX + eW - 5 && p.getY() + p.getHeight() / 2 <= eY + eH && p.getY() + p.getHeight() / 2 >= eY + 5 && p.getY() + (eY - p.getY()) >= eY && p.getY() + p.getHeight() <= eY + eH || p.getX() <= eX + eW - 5 && p.getX() >= eX + 5 && p.getY() + p.getHeight() / 2 <= eY + eH && p.getY() + p.getHeight() / 2 >= eY && p.getY() + (eY - p.getY()) >= eY && p.getY() + p.getHeight() <= eY + eH)
         {
             p.setVY(-15);
 
@@ -92,6 +91,13 @@ public class Enemy
         {
             return false;
         }
+    }
+    public void drawScore(Graphics g)
+    {
+        g.setColor(Color.BLACK);
+        Font eSF = new Font("Arial", Font.BOLD, eW * 3);
+        g.setFont(eSF);
+        g.drawString("+ 50", eX - 10, eY - 40);
     }
     public void drawSelf(Graphics g)
     {

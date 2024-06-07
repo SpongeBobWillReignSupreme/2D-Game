@@ -32,6 +32,7 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
     private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
     private int playerLives;
     private long lastLifeLostTime;
+    private boolean gainedScore;
 
 
 
@@ -57,6 +58,7 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         enemy = new Enemy(Color.ORANGE, 450);
         playerLives = 3;
         enemies.add(enemy);
+        gainedScore = false;
 
         JFrame gui = new JFrame(); //This makes the gui box
         gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //Makes sure program can close
@@ -90,6 +92,8 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
     //All your UI drawing goes in here
     public void paintComponent(Graphics g)
     {
+        Font font = new Font("Arial", Font.BOLD, 30);
+        g.setFont(font);
         // Drawing a Blue Rectangle to be the background
         g.setColor(new Color(Color.HSBtoRGB(0.56f, 0.3f, 0.9f)));
         g.fillRect(0, 0, WIDTH, HEIGHT);
@@ -116,14 +120,20 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         // drawing the enemies
         for(int i = 0; i < enemies.size(); i++)
         {
-            enemies.get(i).drawSelf(g);
+            Enemy enemy = enemies.get(i);
+            enemy.drawSelf(g);
+            if(gainedScore)
+            {
+                g.setColor(Color.BLACK);
+                Font eSF = new Font("Arial", Font.BOLD, enemy.getWidth() * 3);
+                g.setFont(eSF);
+                g.drawString("+ 50", enemy.getX() - 10, enemy.getY() - 40);
+            }
         }
 
         // Making the scorebox
         g.setColor(Color.GRAY);
         g.fillRect(800, 20, 180, 50);
-        Font font = new Font("Arial", Font.BOLD, 30);
-        g.setFont(font);
         g.setColor(Color.BLACK);
         g.drawString("Score = " + score, 805, 60);
         //enemy.drawSelf(g);
@@ -169,6 +179,7 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
             else if(enemies.get(i).checkStomp(player))
             {
                 //just remove
+                gainedScore = true;
                 enemies.remove(i);
                 score += 50;
             }
