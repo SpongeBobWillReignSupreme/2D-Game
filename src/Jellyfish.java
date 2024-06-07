@@ -18,9 +18,9 @@ public class Jellyfish
         col = Color.PINK;
     }
 
-    public int getX() {return x;}
-    public int getY() {return y;}
-    public int getDiam() {return diam;}
+    public int getX() { return x; }
+    public int getY() { return y; }
+    public int getDiam() { return diam; }
 
     public void drawSelf(Graphics g)
     {
@@ -28,13 +28,16 @@ public class Jellyfish
         g.fillOval(x,y, diam, diam);
     }
 
-    public boolean checkTouch(Player p)
+    public boolean checkCatch(Player p)
     {
         if(p.getX() + p.getWidth() >= x + 5 && p.getX() <= x + diam - 5 && p.getY() + p.getHeight() >= y && p.getY() <= y + diam)
         {
             col = new Color(Color.HSBtoRGB(0.56f, 0.3f, 0.9f));
             return true;// We touched
         }
-        return false; // We didn't touch
+        else
+        {
+            return false; // We didn't touch
+        }
     }
 }

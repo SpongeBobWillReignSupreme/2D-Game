@@ -24,10 +24,10 @@ public class Enemy
         col = c;
     }
 
-    public int getX() {return eX;}
-    public int getY() {return eY;}
-    public int getWidth() {return eW;}
-    public int getHeight() {return eH;}
+    public int getX() { return eX; }
+    public int getY() { return eY; }
+    public int getWidth() { return eW; }
+    public int getHeight() { return eH; }
 
     public void enemyMove()
     {

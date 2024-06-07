@@ -18,12 +18,13 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
     private static final int scoreboxY = 20;
     private static final int scoreboxFontSize = 30;
     private static final int enemyX = 450;
-    private static final int jellyfishX = 200;
     private static final int jellyfishY = 180;
     private static final int TICKS = 60;
     private static final long lifeLostDelay = 2100;
+    private static final long powerupDuration = 10000;
 
-    private ArrayList<Jellyfish> pinkJellyfishes = new ArrayList<>();
+    private ArrayList<Jellyfish> regJellies = new ArrayList<>();
+    private ArrayList<BlueJellyfish> blueJellies = new ArrayList<>();
     private ArrayList<Platform> platforms = new ArrayList<>();
     private ArrayList<Enemy> enemies = new ArrayList<>();
     private Player player = new Player();
@@ -32,6 +33,8 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
     private int score;
     private int playerLives;
     private long lastLifeLostTime;
+    private boolean powerupActive;
+    private long powerupStartTime;
 
     public Game()
     {
@@ -41,14 +44,23 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
 
     private void initializeGame()
     {
-        pinkJellyfishes.add(new Jellyfish(jellyfishX, jellyfishY));
-        pinkJellyfishes.add(new Jellyfish(700, jellyfishY));
+        // Adding regular jellies
+        regJellies.add(new Jellyfish(200, jellyfishY));
+        regJellies.add(new Jellyfish(700, jellyfishY));
+        // Adding blue jellies
+        blueJellies.add(new BlueJellyfish(400, jellyfishY));
+        // Adding the plats for the ground
         dirt = new Platform(0, dirtHEIGHT, WIDTH, HEIGHT, new Color(87, 52, 41));
         grass = new Platform(0, grassHEIGHT, WIDTH, dirtHEIGHT - grassHEIGHT, Color.GREEN);
+        // Adding the platforms
         platforms.add(new Platform(Color.YELLOW));
         platforms.add(new Platform(100, 250, 250, 50, Color.YELLOW));
+        // Adding the enemies
         enemies.add(new Enemy(Color.ORANGE, enemyX));
+        // Initializing the player lives to 3
         playerLives = livesLeft;
+        // Initializing powerupActive to false
+        powerupActive = false;
     }
 
     private void setupGUI()
@@ -69,7 +81,14 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
 
     public void keyPressed(KeyEvent e)
     {
+        int key = e.getKeyCode();
+
         player.movePlayer(e);
+
+        if(powerupActive && key == 32)
+        {
+
+        }
     }
 
     public void paintComponent(Graphics g)
@@ -81,6 +100,7 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         drawPlatforms(g);
         drawEnemies(g);
         drawScorebox(g);
+        //drawFireBall(g);
     }
 
     private void drawBackground(Graphics g)
@@ -97,9 +117,15 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
 
     private void drawJellyfishes(Graphics g)
     {
-        for (Jellyfish jellyfish : pinkJellyfishes)
+        // Drawing regular jellies
+        for(Jellyfish jellyfish : regJellies)
         {
             jellyfish.drawSelf(g);
+        }
+        // Drawing blue jellies
+        for(BlueJellyfish blueJellyfish : blueJellies)
+        {
+            blueJellyfish.drawSelf(g);
         }
     }
 
@@ -138,20 +164,37 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
     {
         long currentTime = System.currentTimeMillis();
         player.movement(grassHEIGHT, platforms);
-        handleJellyfishes();
+        handleJellyfishes(currentTime);
         handleEnemies(currentTime);
         repaint();
     }
 
-    private void handleJellyfishes()
+    private void handleJellyfishes(long currentTime)
     {
-        for (int i = 0; i < pinkJellyfishes.size(); i++)
+        for(int i = 0; i < regJellies.size(); i++)
         {
-            if (pinkJellyfishes.get(i).checkTouch(player))
+            Jellyfish jellyfish = regJellies.get(i);
+            if (jellyfish.checkCatch(player))
             {
-                pinkJellyfishes.remove(i);
+                regJellies.remove(i);
                 i--;
                 score += 100;
+            }
+        }
+        for(int i = 0; i < blueJellies.size(); i++)
+        {
+            BlueJellyfish blueJellyfish = blueJellies.get(i);
+            if (blueJellyfish.checkCatchBlue(player))
+            {
+                blueJellies.remove(i);
+                i--;
+                score += 200;
+                powerupActive = true;
+                powerupStartTime = currentTime;
+            }
+            if(currentTime - powerupStartTime > powerupDuration)
+            {
+                powerupActive = false;
             }
         }
     }
@@ -181,14 +224,12 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
 
     private void handlePlayerTouchedByEnemy(long currentTime)
     {
-        player.setColor(Color.RED);
-        playerLives--;
-        lastLifeLostTime = currentTime;
-    }
-
-    public void fireBall()
-    {
-        //if()
+        if(!powerupActive)
+        {
+            player.setColor(Color.RED);
+            playerLives--;
+            lastLifeLostTime = currentTime;
+        }
     }
 
     public void keyReleased(KeyEvent e)

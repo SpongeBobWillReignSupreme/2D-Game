@@ -31,9 +31,6 @@ public class Player extends JComponent
         pY = 335;
         pW = 50;
         pH = 100;
-        //hX = 70;
-        //hY = 288;
-        //diam = 50;
         vX = 0;
         vY = 0;
         isJumping = false;
@@ -41,30 +38,30 @@ public class Player extends JComponent
         color = Color.ORANGE;
     }
 
-    public int getWidth() {return pW;}
-    public int getHeight() {return pH;}
-    public int getX() {return pX;}
-    public int getY() {return pY;}
-    public Color getColor() {return color;}
-    public int getVX() {return vX;}
-    public int getVY() {return vY;}
-    public boolean getIsJumping() {return isJumping;}
-    public void setColor(Color c) {color = c;}
-    public void setX(int x) {pX = x;}
-    public void setY(int y) {pY = y;}
-    public void setVY(int yVel) {vY = yVel;}
-    public void setVX(int xVel) {vX = xVel;}
+    public int getWidth() { return pW; }
+    public int getHeight() { return pH; }
+    public int getX() { return pX; }
+    public int getY() { return pY; }
+    public Color getColor() { return color; }
+    public int getVX() { return vX; }
+    public int getVY() { return vY; }
+    public boolean getIsJumping() { return isJumping; }
+    public void setColor(Color c) { color = c; }
+    public void setX(int x) { pX = x; }
+    public void setY(int y) { pY = y; }
+    public void setVY(int yVel) { vY = yVel; }
+    public void setVX(int xVel) { vX = xVel; }
 
     public void movePlayer(KeyEvent e)
     {
         int key = e.getKeyCode();
-        if(key == 37)
+        if(key == 65) // Left
         {
             //pX -= 10;
             //hX -= 10;
             vX = -10;
         }
-        else if(key == 39)
+        else if(key == 68) // Right
         {
             //pX += 10;
             //hX += 10;
@@ -74,7 +71,7 @@ public class Player extends JComponent
         {
             //vY = -10;
         }*/
-        if(key == 38)//up
+        if(key == 87) // Up
         {
             if(!isJumping && vY == 0)
             {
@@ -88,11 +85,11 @@ public class Player extends JComponent
     public void stopHorizontal(KeyEvent e)
     {
         int key = e.getKeyCode();
-        if(key == 37)
+        if(key == 65) // Left
         {
             vX = 0;
         }
-        else if(key == 39)
+        else if(key == 68) // Right
         {
             vX = 0;
         }
@@ -185,20 +182,5 @@ public class Player extends JComponent
         g.fillRect(pX, pY, pW, pH);
         // Drawing the head of the player
         //g.fillOval(hX, hY, diam, diam);
-    }
-    public void handleCollision(int fHeight)
-    {
-        if(pY + pH <= fHeight)
-        {
-            //v
-        }
-    }
-    public void jump(int h)
-    {
-        if(!isJumping)
-        {
-            vY = -20;
-            isJumping = true;
-        }
     }
 }
