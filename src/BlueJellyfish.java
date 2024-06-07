@@ -28,6 +28,12 @@ public class BlueJellyfish
         g.fillOval(x,y, diam, diam);
     }
 
+    public void drawSelf (Graphics g, int screenWIDTH, Player p)
+    {
+        g.setColor(col);
+        int distToPlayerX = x - p.getX();
+        g.fillOval(screenWIDTH/2 - p.getWidth()/2 + distToPlayerX, y, diam, diam);
+    }
     public boolean checkCatchBlue(Player p)
     {
         if(p.getX() + p.getWidth() >= x + 5 && p.getX() <= x + diam - 5 && p.getY() + p.getHeight() >= y && p.getY() <= y + diam)

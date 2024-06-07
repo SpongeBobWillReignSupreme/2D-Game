@@ -55,6 +55,8 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         // Adding the platforms
         platforms.add(new Platform(Color.YELLOW));
         platforms.add(new Platform(100, 250, 250, 50, Color.YELLOW));
+
+        platforms.add(new Platform(1200, 300, 250, 50, Color.YELLOW));
         // Adding the enemies
         enemies.add(new Enemy(Color.ORANGE, enemyX));
         // Initializing the player lives to 3
@@ -85,10 +87,11 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
 
         player.movePlayer(e);
 
-        if(powerupActive && key == 32)
+        /*if(powerupActive && key == 32)
         {
 
         }
+         */
     }
 
     public void paintComponent(Graphics g)
@@ -120,25 +123,25 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         // Drawing regular jellies
         for(Jellyfish jellyfish : regJellies)
         {
-            jellyfish.drawSelf(g);
+            jellyfish.drawSelf(g, WIDTH, player);
         }
         // Drawing blue jellies
         for(BlueJellyfish blueJellyfish : blueJellies)
         {
-            blueJellyfish.drawSelf(g);
+            blueJellyfish.drawSelf(g, WIDTH, player);
         }
     }
 
     private void drawPlayer(Graphics g)
     {
-        player.drawPlayer(g);
+        player.drawPlayer2(g, WIDTH);
     }
 
     private void drawPlatforms(Graphics g)
     {
         for (Platform platform : platforms)
         {
-            platform.drawSelf(g);
+            platform.drawSelf(g, WIDTH, player);
         }
     }
 
@@ -146,7 +149,7 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
     {
         for (Enemy enemy : enemies)
         {
-            enemy.drawSelf(g);
+            enemy.drawSelf(g, WIDTH, player);
         }
     }
 

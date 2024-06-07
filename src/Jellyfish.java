@@ -27,6 +27,12 @@ public class Jellyfish
         g.setColor(col);
         g.fillOval(x,y, diam, diam);
     }
+    public void drawSelf (Graphics g, int screenWIDTH, Player p)
+    {
+        g.setColor(col);
+        int distToPlayerX = x - p.getX();
+        g.fillOval(screenWIDTH/2 - p.getWidth()/2 + distToPlayerX, y, diam, diam);
+    }
 
     public boolean checkCatch(Player p)
     {

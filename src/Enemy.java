@@ -85,4 +85,10 @@ public class Enemy
         g.setColor(col);
         g.fillRect(eX, eY, eW, eH);
     }
+    public void drawSelf (Graphics g, int screenWIDTH, Player p)
+    {
+        g.setColor(col);
+        int distToPlayerX = eX - p.getX();
+        g.fillRect(screenWIDTH/2 - p.getWidth()/2 + distToPlayerX, eY, eW, eH);
+    }
 }
