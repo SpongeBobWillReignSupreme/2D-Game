@@ -1,7 +1,6 @@
 package src;
 
-import java.awt.Graphics;
-import java.awt.Color;
+import java.awt.*;
 public class Platform
 {
     private int x;
@@ -27,22 +26,11 @@ public class Platform
         c = color;
     }
 
-    public int getX()
-    {
-        return x;
-    }
-    public int getY()
-    {
-        return y;
-    }
-    public int getWidth()
-    {
-        return w;
-    }
-    public int getHeight()
-    {
-        return h;
-    }
+    public int getX() {return x;}
+    public int getY() {return y;}
+    public int getWidth() {return w;}
+    public int getHeight() {return h;}
+
     public void drawSelf (Graphics g)
     {
         g.setColor(c);

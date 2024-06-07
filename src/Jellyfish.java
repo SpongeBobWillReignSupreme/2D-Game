@@ -1,8 +1,6 @@
 package src;
 
-import java.awt.Graphics;
-import java.awt.Color;
-import java.util.ArrayList;
+import java.awt.*;
 
 public class Jellyfish
 {
@@ -12,31 +10,18 @@ public class Jellyfish
     private Color col;
 
 
-    public Jellyfish(int xC, int yC, Color c)
+    public Jellyfish(int xC, int yC)
     {
         x = xC;
         y = yC;
         diam = 50;
-        col = c;
+        col = Color.PINK;
     }
 
-    public String toString()
-    {
-        return "(" + x + "," + y + ")\n" + diam;
-    }
+    public int getX() {return x;}
+    public int getY() {return y;}
+    public int getDiam() {return diam;}
 
-    public int getX()
-    {
-        return x;
-    }
-    public int getY()
-    {
-        return y;
-    }
-    public int getDiam()
-    {
-        return diam;
-    }
     public void drawSelf(Graphics g)
     {
         g.setColor(col);
@@ -48,31 +33,8 @@ public class Jellyfish
         if(p.getX() + p.getWidth() >= x + 5 && p.getX() <= x + diam - 5 && p.getY() + p.getHeight() >= y && p.getY() <= y + diam)
         {
             col = new Color(Color.HSBtoRGB(0.56f, 0.3f, 0.9f));
-            return true;//we touched
+            return true;// We touched
         }
-        return false; //we didn't touch
-    }
-    /* public void checkTouch(Player p, ArrayList<Jellyfish> jellies)
-     {
-         for(int i = 0; i < jellies.size(); i++)
-         {
-             Jellyfish jelly = jellies.get(i);
-             if(p.getX() + p.getWidth() >= x + 5 && p.getX() <= x + diam - 5 && p.getY() + p.getHeight() >= y && p.getY() <= y + diam)
-             {
-                 jellies.remove(i);
-                 System.out.println("Touched jelly");
-             }
-         }
-     }*/
-    public boolean blue(Jellyfish b, Player p)
-    {
-        if(b.checkTouch(p) == true)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return false; // We didn't touch
     }
 }

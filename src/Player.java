@@ -1,10 +1,9 @@
 package src;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import javax.swing.JComponent;
 
 
 public class Player extends JComponent
@@ -42,70 +41,19 @@ public class Player extends JComponent
         color = Color.ORANGE;
     }
 
-    public int getWidth()
-    {
-        return pW;
-    }
-    public int getHeight()
-    {
-        return pH;
-    }
-    public int getX()
-    {
-        return pX;
-    }
-    public int getY()
-    {
-        return pY;
-    }
-    public Color getColor()
-    {
-        return color;
-    }
-    /*public int getHeadX()
-    {
-        return hX;
-    }
-    public int getHeadY()
-    {
-        return hY;
-    }
-    public int getDiam()
-    {
-        return diam;
-    }*/
-    public int getVX()
-    {
-        return vX;
-    }
-    public int getVY()
-    {
-        return vY;
-    }
-    public boolean getIsJumping()
-    {
-        return isJumping;
-    }
-    public void setColor(Color c)
-    {
-        color = c;
-    }
-    public void setX(int x)
-    {
-        pX = x;
-    }
-    public void setY(int y)
-    {
-        pY = y;
-    }
-    public void setVY(int yVel)
-    {
-        vY = yVel;
-    }
-    public void setVX(int xVel)
-    {
-        vX = xVel;
-    }
+    public int getWidth() {return pW;}
+    public int getHeight() {return pH;}
+    public int getX() {return pX;}
+    public int getY() {return pY;}
+    public Color getColor() {return color;}
+    public int getVX() {return vX;}
+    public int getVY() {return vY;}
+    public boolean getIsJumping() {return isJumping;}
+    public void setColor(Color c) {color = c;}
+    public void setX(int x) {pX = x;}
+    public void setY(int y) {pY = y;}
+    public void setVY(int yVel) {vY = yVel;}
+    public void setVX(int xVel) {vX = xVel;}
 
     public void movePlayer(KeyEvent e)
     {
@@ -142,14 +90,10 @@ public class Player extends JComponent
         int key = e.getKeyCode();
         if(key == 37)
         {
-            //pX -= 10;
-            //hX -= 10;
             vX = 0;
         }
         else if(key == 39)
         {
-            //pX += 10;
-            //hX += 10;
             vX = 0;
         }
     }
@@ -157,8 +101,6 @@ public class Player extends JComponent
     {
         pX += vX;
         pY += vY;
-        //hX += vX;
-        //hY += vY;
         System.out.println(vY);
 
 
