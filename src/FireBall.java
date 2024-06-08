@@ -19,13 +19,14 @@ public class FireBall
         else
             fX = p.getX() + p.getWidth()/2;
         vX = 0;
+
+        fY = p.getY() + p.getHeight()/2;
     }
 
     //public int getVelo() { return xVelo; }
-    public int getX()
-    {
-        return fX;
-    }
+    public int getX() { return fX; }
+    public int getY() { return fY; }
+    public int getDiam() { return diam; }
 
     public void drawFireBall(Graphics g, int screenWIDTH, Player p)
     {
@@ -34,7 +35,7 @@ public class FireBall
         if(p.getMovingLeft())
         {
             distToPlayerX = p.getX() - fX;
-            g.fillOval(screenWIDTH / 2 - p.getWidth() / 2 - distToPlayerX, p.getY() + p.getHeight() / 2, diam, diam);
+            g.fillOval(screenWIDTH/2 - p.getWidth()/2 - distToPlayerX, p.getY() + p.getHeight()/2, diam, diam);
         }
         else
         {

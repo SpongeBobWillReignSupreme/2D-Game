@@ -4,24 +4,27 @@ import java.awt.*;
 
 public class Enemy
 {
+    private static final Color col = Color.ORANGE;
+    private static final int eW = 50;
+    private static final int eH = 70;
+
     private int eX;
     private int eY;
-    private int eW;
-    private int eH;
     private int vX;
     private int moveCount;
-    private Color col;
 
 
-    public Enemy(Color c, int x)
+    public Enemy(int x)
     {
         eX = x;
         eY = 365;
-        eW = 50;
-        eH = 70;
         vX = 1;
         moveCount = 0;
-        col = c;
+    }
+    public Enemy(int x, int y)
+    {
+        eX = x;
+        eY = y;
     }
 
     public int getX() { return eX; }
@@ -79,6 +82,13 @@ public class Enemy
         {
             return false;
         }
+    }
+    public boolean checkTouchFireBall(FireBall f)
+    {
+        if(f.getX() + f.getDiam() >= eX && f.getX() <= eX + eW && f.getY() + f.getDiam() >= eY && f.getY() <= eY + eH)
+            return true;
+        else
+            return false;
     }
     public void drawSelf(Graphics g)
     {

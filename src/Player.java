@@ -66,7 +66,7 @@ public class Player extends JComponent
             movingLeft = true;
             movingRight = false;
         }
-        else if(key == 68) // Right
+        if(key == 68) // Right
         {
             //pX += 10;
             //hX += 10;

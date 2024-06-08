@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 public class Game extends JComponent implements KeyListener, MouseListener, MouseMotionListener
 {
+    // Constant variables
     private static final int WIDTH = 1000;
     private static final int HEIGHT = 500;
     private static final int dirtHEIGHT = 450;
@@ -17,12 +18,12 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
     private static final int scoreboxX = 800;
     private static final int scoreboxY = 20;
     private static final int scoreboxFontSize = 30;
-    private static final int enemyX = 450;
     private static final int jellyfishY = 180;
     private static final int TICKS = 60;
     private static final long lifeLostDelay = 2100;
     private static final long powerupDuration = 10000;
 
+    // Instance variables
     private ArrayList<Jellyfish> regJellies = new ArrayList<>();
     private ArrayList<BlueJellyfish> blueJellies = new ArrayList<>();
     private ArrayList<Platform> platforms = new ArrayList<>();
@@ -56,10 +57,11 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         // Adding the platforms
         platforms.add(new Platform(Color.YELLOW));
         platforms.add(new Platform(100, 250, 250, 50, Color.YELLOW));
-
-        platforms.add(new Platform(1200, 300, 250, 50, Color.YELLOW));
+        platforms.add(new Platform(1200, 250, 250, 50, Color.YELLOW));
         // Adding the enemies
-        enemies.add(new Enemy(Color.ORANGE, enemyX));
+        enemies.add(new Enemy(450));
+        enemies.add(new Enemy(1500));
+        enemies.add(new Enemy(600));
         // Initializing the player lives to 3
         playerLives = livesLeft;
         // Initializing powerupActive to false
@@ -105,9 +107,7 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         drawGround(g);
         drawJellyfishes(g);
         drawPlayer(g);
-        for(FireBall f: fireBalls)
-            f.drawFireBall(g, WIDTH, player);
-
+        drawFireBalls(g);
         drawPlatforms(g);
         drawEnemies(g);
         drawScorebox(g);
@@ -146,27 +146,20 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
 
     private void drawFireBalls(Graphics g)
     {
-        /*for(FireBall fireBall : fireBalls)
-        {
-            fireBall.drawFireBall(g, WIDTH, player);
-        }
-         */
+        for(FireBall f: fireBalls)
+            f.drawFireBall(g, WIDTH, player);
     }
 
     private void drawPlatforms(Graphics g)
     {
         for (Platform platform : platforms)
-        {
             platform.drawSelf(g, WIDTH, player);
-        }
     }
 
     private void drawEnemies(Graphics g)
     {
         for (Enemy enemy : enemies)
-        {
             enemy.drawSelf(g, WIDTH, player);
-        }
     }
 
     private void drawScorebox(Graphics g)
@@ -185,19 +178,8 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         player.movement(grassHEIGHT, platforms);
         handleJellyfishes(currentTime);
         handleEnemies(currentTime);
-        for(FireBall f:fireBalls)
-            f.act();
+        handleFireBalls();
 
-        for(int i = 0; i < fireBalls.size(); i++)
-        {
-            FireBall f = fireBalls.get(i);
-            if(Math.abs(f.getX() - player.getX()) > WIDTH)
-            {
-                fireBalls.remove(i);
-                i--;
-            }
-        }
-        System.out.println(fireBalls);
         repaint();
     }
 
@@ -221,10 +203,10 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
                 blueJellies.remove(i);
                 i--;
                 score += 200;
-                powerupActive = true;
                 player.setColor(Color.BLUE);
-                System.out.println("Got powerup!");
+                powerupActive = true;
                 powerupStartTime = currentTime;
+                System.out.println("Got powerup!");
             }
         }
         if(currentTime - powerupStartTime > powerupDuration && powerupActive)
@@ -234,21 +216,50 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         }
     }
 
+    public void handleFireBalls()
+    {
+        for(FireBall f : fireBalls)
+            f.act();
+
+        for(int i = 0; i < fireBalls.size(); i++)
+        {
+            FireBall f = fireBalls.get(i);
+            if (Math.abs(f.getX() - player.getX()) > WIDTH)
+            {
+                fireBalls.remove(i);
+                i--;
+            }
+        }
+    }
+
     private void handleEnemies(long currentTime)
     {
         for(int i = 0; i < enemies.size(); i++)
         {
             Enemy enemy = enemies.get(i);
             enemy.enemyMove();
-            if(!player.getColor().equals(Color.BLUE) && enemy.checkTouch(player) && !player.getColor().equals(Color.RED))
+            if(player.getColor().equals(Color.ORANGE))
             {
-                handlePlayerTouchedByEnemy(currentTime);
-                System.out.println("Player lives: " + playerLives);
+                if(enemy.checkTouch(player))
+                {
+                    handlePlayerTouchedByEnemy(currentTime);
+                    System.out.println("Player lives: " + playerLives);
+                }
+                else if (enemy.checkStomp(player))
+                {
+                    enemies.remove(i);
+                    score += 50;
+                }
             }
-            else if(enemy.checkStomp(player) && player.getColor().equals(Color.ORANGE))
+            for(int a = 0; a < fireBalls.size(); a++)
             {
-                enemies.remove(i);
-                score += 50;
+                FireBall f = fireBalls.get(a);
+                if(enemy.checkTouchFireBall(f))
+                {
+                    enemies.remove(i);
+                    fireBalls.remove(a);
+                    score += 50;
+                }
             }
             if(currentTime - lastLifeLostTime > lifeLostDelay && !player.getColor().equals(Color.BLUE))
             {
