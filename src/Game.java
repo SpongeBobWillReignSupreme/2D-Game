@@ -91,7 +91,10 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         if(key == 32 && powerupActive)
         {
             FireBall f = new FireBall(player);
-            f.shootRight();
+            if(player.getMovingLeft())
+                f.shootLeft();
+            else if(player.getMovingRight())
+                f.shootRight();
             fireBalls.add(f);
         }
     }

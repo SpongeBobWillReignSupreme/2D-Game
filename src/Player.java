@@ -21,7 +21,8 @@ public class Player extends JComponent
     private boolean isJumping;
     private boolean onPlat;
     private Color color;
-
+    private boolean movingLeft;
+    private boolean movingRight;
 
     //Default Constructor
     public Player()
@@ -46,6 +47,8 @@ public class Player extends JComponent
     public int getVX() { return vX; }
     public int getVY() { return vY; }
     public boolean getIsJumping() { return isJumping; }
+    public boolean getMovingLeft() { return movingLeft; }
+    public boolean getMovingRight() { return movingRight; }
     public void setColor(Color c) { color = c; }
     public void setX(int x) { pX = x; }
     public void setY(int y) { pY = y; }
@@ -60,12 +63,16 @@ public class Player extends JComponent
             //pX -= 10;
             //hX -= 10;
             vX = -10;
+            movingLeft = true;
+            movingRight = false;
         }
         else if(key == 68) // Right
         {
             //pX += 10;
             //hX += 10;
             vX = 10;
+            movingRight = true;
+            movingLeft = false;
         }
         /*else if(key == 38)
         {

@@ -4,42 +4,54 @@ import java.awt.*;
 
 public class FireBall
 {
-    private static final int diam = 40;
-   // private static final int xVelo = 20;
+    private static final int diam = 50;
     private static final Color color = Color.GRAY;
 
     private int fX;
     private int fY;
-    private int vx;
+    private int vX;
 
 
-    public FireBall(Player thePlayer)
+    public FireBall(Player p)
     {
-
-        fX = thePlayer.getX() + thePlayer.getWidth()/2;
-        fY = thePlayer.getY() + thePlayer.getHeight()/2;
-        vx = 0;
+        if(p.getMovingLeft())
+            fX = p.getX() - p.getWidth()/2;
+        else
+            fX = p.getX() + p.getWidth()/2;
+        vX = 0;
     }
 
     //public int getVelo() { return xVelo; }
+    public int getX()
+    {
+        return fX;
+    }
 
     public void drawFireBall(Graphics g, int screenWIDTH, Player p)
     {
         g.setColor(color);
-        int distToPlayerX = fX - p.getX();
-        g.fillOval(screenWIDTH/2 + p.getWidth()/2 + distToPlayerX, p.getY() + p.getHeight()/2 , diam, diam);
-
+        int distToPlayerX;
+        if(p.getMovingLeft())
+        {
+            distToPlayerX = p.getX() - fX;
+            g.fillOval(screenWIDTH / 2 - p.getWidth() / 2 - distToPlayerX, p.getY() + p.getHeight() / 2, diam, diam);
+        }
+        else
+        {
+            distToPlayerX = fX - p.getX();
+            g.fillOval(screenWIDTH / 2 + p.getWidth() / 2 + distToPlayerX, p.getY() + p.getHeight() / 2, diam, diam);
+        }
+    }
+    public void shootLeft()
+    {
+        vX = -20;
     }
     public void shootRight()
     {
-        vx = 20;
+        vX = 20;
     }
     public void act()
     {
-        fX += vx;
-    }
-    public int getX()
-    {
-        return fX;
+        fX += vX;
     }
 }
