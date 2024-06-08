@@ -28,6 +28,7 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
     private ArrayList<Platform> platforms = new ArrayList<>();
     private ArrayList<Enemy> enemies = new ArrayList<>();
     private Player player = new Player();
+    private ArrayList<FireBall> fireBalls = new ArrayList<>();
     private Platform dirt;
     private Platform grass;
     private int score;
@@ -87,11 +88,12 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
 
         player.movePlayer(e);
 
-        /*if(powerupActive && key == 32)
+        if(key == 32 && powerupActive)
         {
-
+            FireBall f = new FireBall(player);
+            f.shootRight();
+            fireBalls.add(f);
         }
-         */
     }
 
     public void paintComponent(Graphics g)
@@ -100,10 +102,12 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         drawGround(g);
         drawJellyfishes(g);
         drawPlayer(g);
+        for(FireBall f: fireBalls)
+            f.drawFireBall(g, WIDTH, player);
+
         drawPlatforms(g);
         drawEnemies(g);
         drawScorebox(g);
-        //drawFireBall(g);
     }
 
     private void drawBackground(Graphics g)
@@ -135,6 +139,15 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
     private void drawPlayer(Graphics g)
     {
         player.drawPlayer2(g, WIDTH);
+    }
+
+    private void drawFireBalls(Graphics g)
+    {
+        /*for(FireBall fireBall : fireBalls)
+        {
+            fireBall.drawFireBall(g, WIDTH, player);
+        }
+         */
     }
 
     private void drawPlatforms(Graphics g)
@@ -169,6 +182,19 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         player.movement(grassHEIGHT, platforms);
         handleJellyfishes(currentTime);
         handleEnemies(currentTime);
+        for(FireBall f:fireBalls)
+            f.act();
+
+        for(int i = 0; i < fireBalls.size(); i++)
+        {
+            FireBall f = fireBalls.get(i);
+            if(Math.abs(f.getX() - player.getX()) > WIDTH)
+            {
+                fireBalls.remove(i);
+                i--;
+            }
+        }
+        System.out.println(fireBalls);
         repaint();
     }
 
@@ -193,12 +219,15 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
                 i--;
                 score += 200;
                 powerupActive = true;
+                player.setColor(Color.BLUE);
+                System.out.println("Got powerup!");
                 powerupStartTime = currentTime;
             }
-            if(currentTime - powerupStartTime > powerupDuration)
-            {
-                powerupActive = false;
-            }
+        }
+        if(currentTime - powerupStartTime > powerupDuration && powerupActive)
+        {
+            powerupActive = false;
+            player.setColor(Color.ORANGE);
         }
     }
 
@@ -208,17 +237,17 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         {
             Enemy enemy = enemies.get(i);
             enemy.enemyMove();
-            if(enemy.checkTouch(player) && !player.getColor().equals(Color.RED))
+            if(!player.getColor().equals(Color.BLUE) && enemy.checkTouch(player) && !player.getColor().equals(Color.RED))
             {
                 handlePlayerTouchedByEnemy(currentTime);
                 System.out.println("Player lives: " + playerLives);
             }
-            else if(enemy.checkStomp(player))
+            else if(enemy.checkStomp(player) && player.getColor().equals(Color.ORANGE))
             {
                 enemies.remove(i);
                 score += 50;
             }
-            if(currentTime - lastLifeLostTime > lifeLostDelay)
+            if(currentTime - lastLifeLostTime > lifeLostDelay && !player.getColor().equals(Color.BLUE))
             {
                 player.setColor(Color.ORANGE);
             }

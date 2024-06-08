@@ -114,7 +114,7 @@ public class Player extends JComponent
 
         if(pY + pH >= floor && !onPlat)//landing on the floor
         {
-            System.out.println("on floor");
+            //System.out.println("on floor");
             vY = 0;
             pY = floor - pH;
             isJumping = false;
@@ -158,7 +158,7 @@ public class Player extends JComponent
 
             if (pY + pH >= floor && !onPlat)//landing on the floor
             {
-                System.out.println("on floor");
+                //System.out.println("on floor");
                 vY = 0;
                 if(vX != -10 && vX != 10)
                 {
