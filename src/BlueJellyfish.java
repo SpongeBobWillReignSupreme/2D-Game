@@ -6,39 +6,38 @@ public class BlueJellyfish
 {
     // Constants
     private static final int diam = 45;
+    private static final Color col = Color.BLUE;
 
     // Instance variables
-    private int x;
-    private int y;
-    private Color col;
+    private int bJX;
+    private int bJY;
 
 
-    public BlueJellyfish(int xC, int yC)
+    public BlueJellyfish(int x, int y)
     {
-        x = xC;
-        y = yC;
-        col = Color.BLUE;
+        bJX = x;
+        bJY = y;
     }
 
-    public int getX() { return x; }
-    public int getY() { return y; }
+    public int getbJX() { return bJX; }
+    public int getY() { return bJY; }
     public int getDiam() { return diam; }
 
     public void drawSelf(Graphics g)
     {
         g.setColor(col);
-        g.fillOval(x,y, diam, diam);
+        g.fillOval(bJX,bJY, diam, diam);
     }
 
     public void drawSelf (Graphics g, int screenWIDTH, Player p)
     {
         g.setColor(col);
-        int distToPlayerX = x - p.getX();
-        g.fillOval(screenWIDTH/4 - p.getWidth()/2 + distToPlayerX, y, diam, diam);
+        int distToPlayerX = bJX - p.getX();
+        g.fillOval(screenWIDTH/4 - p.getWidth()/2 + distToPlayerX, bJY, diam, diam);
     }
     public boolean checkCatchBlue(Player p)
     {
-        if(p.getX() + p.getWidth() >= x + 5 && p.getX() <= x + diam - 5 && p.getY() + p.getHeight() >= y && p.getY() <= y + diam)
+        if(p.getX() + p.getWidth() >= bJX + 5 && p.getX() <= bJX + diam - 5 && p.getY() + p.getHeight() >= bJY && p.getY() <= bJY + diam)
         {
             return true;// We touched
         }

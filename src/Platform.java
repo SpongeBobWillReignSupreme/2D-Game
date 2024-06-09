@@ -26,12 +26,12 @@ public class Platform
         color = c;
     }
 
-    public int getxPos() { return xPos; }
-    public int getyPos() { return yPos; }
+    public int getX() { return xPos; }
+    public int getY() { return yPos; }
     public int getWidth() { return platW; }
     public int getHeight() { return platH; }
 
-    public void drawSelf (Graphics g)
+    public void drawSelf(Graphics g)
     {
         g.setColor(color);
         g.fillRect(xPos, yPos, platW, platH);

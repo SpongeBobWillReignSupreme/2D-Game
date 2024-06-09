@@ -15,15 +15,15 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
     // CONSTANT VARIABLES
     private static final int WIDTH = 1000;
     private static final int HEIGHT = 500;
-    private static final int dirtHEIGHT = 450;
-    private static final int grassHEIGHT = 435;
+    private static final int dirtHEIGHT = 460;
+    private static final int grassHEIGHT = 445;
     private static final int livesLeft = 3;
     private static final int scoreboxWIDTH = 195;
     private static final int scoreboxHEIGHT = 50;
     private static final int scoreboxX = 785;
     private static final int scoreboxY = 10;
     private static final int scoreboxFontSize = 30;
-    private static final int defaultJellyfishY = 240;
+    private static final int defaultJellyfishY = 250;
     private static final int TICKS = 60;
     private static final long lifeLostDelay = 2100;
     private static final long powerupDuration = 8000;
@@ -66,9 +66,9 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         dirt = new Platform(0, dirtHEIGHT, WIDTH, HEIGHT, new Color(87, 52, 41));
         grass = new Platform(0, grassHEIGHT, WIDTH, dirtHEIGHT - grassHEIGHT, Color.GREEN);
         // Adding the platforms
-        platforms.add(new Platform(100, 300, Color.YELLOW));
-        platforms.add(new Platform(600, 300, Color.YELLOW));
-        platforms.add(new Platform(1200, 300, Color.YELLOW));
+        platforms.add(new Platform(100, 310, Color.YELLOW));
+        platforms.add(new Platform(600, 310, Color.YELLOW));
+        platforms.add(new Platform(1200, 310, Color.YELLOW));
         // Adding the enemies
         enemies.add(new Enemy(450));
         enemies.add(new Enemy(1500));
@@ -118,30 +118,6 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
                 playSound("fire-spell.wav");
             }
         }
-    }
-
-    public static synchronized void playSound(final String url)
-    {
-        new Thread(new Runnable()
-        {
-            // The wrapper thread is unnecessary, unless it blocks on the
-            // Clip finishing; see comments.
-            public void run()
-            {
-                try
-                {
-                    Clip clip = AudioSystem.getClip();
-                    AudioInputStream inputStream = AudioSystem.getAudioInputStream(
-                            Game.class.getResourceAsStream("/src/SoundEffects/" + url));
-                    clip.open(inputStream);
-                    clip.start();
-                }
-                catch (Exception e)
-                {
-                    System.err.println(e.getMessage());
-                }
-            }
-        }).start();
     }
 
     public void paintComponent(Graphics g)
@@ -272,7 +248,7 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
                 blueJellies.remove(i);
                 i--;
                 score += 200;
-                floatingScores.add(new FloatingScore("+200", blueJellyfish.getX() + blueJellyfish.getDiam()/2, blueJellyfish.getY()));
+                floatingScores.add(new FloatingScore("+200", blueJellyfish.getbJX() + blueJellyfish.getDiam()/2, blueJellyfish.getY()));
                 player.setColor(Color.BLUE);
                 powerupActive = true;
                 powerupStartTime = currentTime;
@@ -314,14 +290,17 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
                 {
                     handlePlayerTouchedByEnemy(currentTime);
                     System.out.println("Player lives: " + playerLives);
+                    System.out.println("poop");
                 }
-                else if (enemy.checkStomp(player))
+                else if(enemy.checkStomp(player))
                 {
                     enemies.remove(i);
                     score += 50;
                     floatingScores.add(new FloatingScore("+50", enemy.getX() + enemy.getWidth()/2, enemy.getY()));
                     playSound("beep.wav");
+                    System.out.println("fart");
                 }
+                System.out.println("checkStomp: " + enemy.checkStomp(player));
             }
             for(int a = 0; a < fireBalls.size(); a++)
             {
@@ -376,6 +355,30 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
     public void keyReleased(KeyEvent e)
     {
         player.stopHorizontal(e);
+    }
+
+    public static synchronized void playSound(final String url)
+    {
+        new Thread(new Runnable()
+        {
+            // The wrapper thread is unnecessary, unless it blocks on the
+            // Clip finishing; see comments.
+            public void run()
+            {
+                try
+                {
+                    Clip clip = AudioSystem.getClip();
+                    AudioInputStream inputStream = AudioSystem.getAudioInputStream(
+                            Game.class.getResourceAsStream("/src/SoundEffects/" + url));
+                    clip.open(inputStream);
+                    clip.start();
+                }
+                catch (Exception e)
+                {
+                    System.err.println(e.getMessage());
+                }
+            }
+        }).start();
     }
 
     public void start(final int ticks) {

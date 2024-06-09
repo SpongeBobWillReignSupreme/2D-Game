@@ -28,7 +28,7 @@ public class Player extends JComponent
     {
         //initializing instance variables
         pX = 70;
-        pY = 335;
+        pY = 355;
         vX = 0;
         vY = 0;
         isJumping = false;
@@ -105,10 +105,10 @@ public class Player extends JComponent
         System.out.println(vY);
 
 
-        if(vY > 0 && pY + pH >= plat.getyPos() && pY + pH <= plat.getyPos() + plat.getHeight() && (pX >= plat.getxPos() && pX <= plat.getxPos() + plat.getWidth() - 5 || pX + pW >= plat.getxPos() + 5 && pX + pW <= plat.getxPos() + plat.getWidth()))
+        if(vY > 0 && pY + pH >= plat.getY() && pY + pH <= plat.getY() + plat.getHeight() && (pX >= plat.getX() && pX <= plat.getX() + plat.getWidth() - 5 || pX + pW >= plat.getX() + 5 && pX + pW <= plat.getX() + plat.getWidth()))
         {
             vY = 0;
-            pY = plat.getyPos() - pH;
+            pY = plat.getY() - pH;
             isJumping = false;
             onPlat = true;
         }
@@ -139,30 +139,27 @@ public class Player extends JComponent
     {
         pX += vX;
         pY += vY;
-        //hX += vX;
-        //hY += vY;
         //System.out.println(vY);
 
-        //use a loop to go through all of the platforms in plats and check if this is true for any of them.  If so exit loop.
+        //use a loop to go through all the platforms in plats and check if this is true for any of them.  If so exit loop.
         for(int i = 0; i < plats.size(); i++)
         {
             Platform plat = plats.get(i);
-            if (vY > 0 && pY + pH >= plat.getyPos() && pY + pH <= plat.getyPos() + plat.getHeight() && (pX >= plat.getxPos() && pX <= plat.getxPos() + plat.getWidth() - 5 || pX + pW >= plat.getxPos() + 5 && pX + pW <= plat.getxPos() + plat.getWidth()))
+            if (vY > 0 && pY + pH >= plat.getY() && pY + pH <= plat.getY() + plat.getHeight() && (pX >= plat.getX() && pX <= plat.getX() + plat.getWidth() - 5 || pX + pW >= plat.getX() + 5 && pX + pW <= plat.getX() + plat.getWidth()))
             {
                 vY = 0;
-                pY = plat.getyPos() - pH;
+                pY = plat.getY() - pH;
                 isJumping = false;
                 onPlat = true;
                 i = plats.size();
             }
-            else if (vY < 0 && pY <= plat.getyPos() + plat.getHeight() - 10 && pY >= plat.getyPos() && (pX >= plat.getxPos() && pX <= plat.getxPos() + plat.getWidth() - 5 || pX + pW >= plat.getxPos() + 5 && pX + pW <= plat.getxPos() + plat.getWidth()))
+            else if(vY < 0 && pY <= plat.getY() + plat.getHeight() - 10 && pY >= plat.getY() && (pX >= plat.getX() && pX <= plat.getX() + plat.getWidth() - 5 || pX + pW >= plat.getX() + 5 && pX + pW <= plat.getX() + plat.getWidth()))
             {
                 vY = 0; // stop upward movement
-                pY = plat.getyPos() + plat.getHeight() - 10; // position player below the platform
+                pY = plat.getY() + plat.getHeight() - 10; // position player below the platform
                 vY = 0.2; // start downward movement to simulate bounce
-                isJumping = true;
-                onPlat = false;
                 i = plats.size();
+                onPlat = false;
             }
             else
             {
@@ -182,7 +179,6 @@ public class Player extends JComponent
             }
             else if (!onPlat)
             {
-
                 vY++;
             }
         }
