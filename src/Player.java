@@ -183,18 +183,19 @@ public class Player extends JComponent
     }
 
     //All your UI drawing goes in here
-    public void drawPlayer(Graphics g) {
+    /*public void drawPlayer(Graphics g)
+    {
         // Drawing the body of the player
         g.setColor(color);
         g.fillRect(pX, pY, pW, pH);
         // Drawing the head of the player
-        //g.fillOval(hX, hY, diam, diam);
     }
-    public void drawPlayer2(Graphics g, int screenWIDTH) {
+    */
+    public void drawPlayer(Graphics g, int screenWIDTH)
+    {
         // Drawing the body of the player
         g.setColor(color);
         g.fillRect(screenWIDTH/2 - pW/2, pY, pW, pH);
         // Drawing the head of the player
-        //g.fillOval(hX, hY, diam, diam);
     }
 }

@@ -9,14 +9,6 @@ public class Platform
     private int h;
     private Color c;
 
-    public Platform(Color color)
-    {
-        x = 600;
-        y = 250;
-        w = 250;
-        h = 50;
-        c = color;
-    }
     public Platform(int xPos, int yPos, int wVal, int hVal, Color color)
     {
         x = xPos;

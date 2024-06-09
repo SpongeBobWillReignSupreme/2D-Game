@@ -12,6 +12,8 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
     private static final int HEIGHT = 500;
     private static final int dirtHEIGHT = 450;
     private static final int grassHEIGHT = 435;
+    private static final int defaultPlatWIDTH = 250;
+    private static final int defaultPlatHEIGHT = 50;
     private static final int livesLeft = 3;
     private static final int scoreboxWIDTH = 180;
     private static final int scoreboxHEIGHT = 50;
@@ -55,9 +57,9 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         dirt = new Platform(0, dirtHEIGHT, WIDTH, HEIGHT, new Color(87, 52, 41));
         grass = new Platform(0, grassHEIGHT, WIDTH, dirtHEIGHT - grassHEIGHT, Color.GREEN);
         // Adding the platforms
-        platforms.add(new Platform(Color.YELLOW));
-        platforms.add(new Platform(100, 250, 250, 50, Color.YELLOW));
-        platforms.add(new Platform(1200, 250, 250, 50, Color.YELLOW));
+        platforms.add(new Platform(600, 275, defaultPlatWIDTH, defaultPlatHEIGHT, Color.YELLOW));
+        platforms.add(new Platform(100, 275, defaultPlatWIDTH, defaultPlatHEIGHT, Color.YELLOW));
+        platforms.add(new Platform(1200, 275, defaultPlatWIDTH, defaultPlatHEIGHT, Color.YELLOW));
         // Adding the enemies
         enemies.add(new Enemy(450));
         enemies.add(new Enemy(1500));
@@ -141,7 +143,7 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
 
     private void drawPlayer(Graphics g)
     {
-        player.drawPlayer2(g, WIDTH);
+        player.drawPlayer(g, WIDTH);
     }
 
     private void drawFireBalls(Graphics g)
