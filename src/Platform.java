@@ -3,36 +3,44 @@ package src;
 import java.awt.*;
 public class Platform
 {
-    private int x;
-    private int y;
-    private int w;
-    private int h;
-    private Color c;
+    private int xPos;
+    private int yPos;
+    private int platW;
+    private int platH;
+    private Color color;
 
-    public Platform(int xPos, int yPos, int wVal, int hVal, Color color)
+    public Platform(int x, int y, Color c)
     {
-        x = xPos;
-        y = yPos;
-        w = wVal;
-        h = hVal;
-        c = color;
+        xPos = x;
+        yPos = y;
+        platW = 200;
+        platH = 40;
+        color = c;
+    }
+    public Platform(int x, int y, int wVal, int hVal, Color c)
+    {
+        xPos = x;
+        yPos = y;
+        platW = wVal;
+        platH = hVal;
+        color = c;
     }
 
-    public int getX() { return x; }
-    public int getY() { return y; }
-    public int getWidth() { return w; }
-    public int getHeight() { return h; }
+    public int getxPos() { return xPos; }
+    public int getyPos() { return yPos; }
+    public int getWidth() { return platW; }
+    public int getHeight() { return platH; }
 
     public void drawSelf (Graphics g)
     {
-        g.setColor(c);
-        g.fillRect(x, y, w, h);
+        g.setColor(color);
+        g.fillRect(xPos, yPos, platW, platH);
     }
     public void drawSelf (Graphics g, int screenWIDTH, Player p)
     {
-        g.setColor(c);
-        int distToPlayerX = x - p.getX();
-        g.fillRect(screenWIDTH/2 - p.getWidth()/2 + distToPlayerX, y, w, h);
+        g.setColor(color);
+        int distToPlayerX = xPos - p.getX();
+        g.fillRect(screenWIDTH/4 - p.getWidth()/2 + distToPlayerX, yPos, platW, platH);
     }
 }
 

@@ -8,16 +8,15 @@ import java.util.ArrayList;
 
 public class Player extends JComponent
 {
+    // Constants
+    private static final int pW = 40;
+    private static final int pH = 80;
+
     //instance variables
     private int pX;
     private int pY;
-    private int pW;
-    private int pH;
-    //private int hX;
-    //private int hY;
-    //private int diam;
     private int vX;
-    private int vY;
+    private double vY;
     private boolean isJumping;
     private boolean onPlat;
     private Color color;
@@ -30,8 +29,6 @@ public class Player extends JComponent
         //initializing instance variables
         pX = 70;
         pY = 335;
-        pW = 50;
-        pH = 100;
         vX = 0;
         vY = 0;
         isJumping = false;
@@ -45,7 +42,7 @@ public class Player extends JComponent
     public int getY() { return pY; }
     public Color getColor() { return color; }
     public int getVX() { return vX; }
-    public int getVY() { return vY; }
+    public double getVY() { return vY; }
     public boolean getIsJumping() { return isJumping; }
     public boolean getMovingLeft() { return movingLeft; }
     public boolean getMovingRight() { return movingRight; }
@@ -108,10 +105,10 @@ public class Player extends JComponent
         System.out.println(vY);
 
 
-        if(vY > 0 && pY + pH >= plat.getY() && pY + pH <= plat.getY() + plat.getHeight() && (pX >= plat.getX() && pX <= plat.getX() + plat.getWidth() - 5 || pX + pW >= plat.getX() + 5 && pX + pW <= plat.getX() + plat.getWidth()))
+        if(vY > 0 && pY + pH >= plat.getyPos() && pY + pH <= plat.getyPos() + plat.getHeight() && (pX >= plat.getxPos() && pX <= plat.getxPos() + plat.getWidth() - 5 || pX + pW >= plat.getxPos() + 5 && pX + pW <= plat.getxPos() + plat.getWidth()))
         {
             vY = 0;
-            pY = plat.getY() - pH;
+            pY = plat.getyPos() - pH;
             isJumping = false;
             onPlat = true;
         }
@@ -150,12 +147,21 @@ public class Player extends JComponent
         for(int i = 0; i < plats.size(); i++)
         {
             Platform plat = plats.get(i);
-            if (vY > 0 && pY + pH >= plat.getY() && pY + pH <= plat.getY() + plat.getHeight() && (pX >= plat.getX() && pX <= plat.getX() + plat.getWidth() - 5 || pX + pW >= plat.getX() + 5 && pX + pW <= plat.getX() + plat.getWidth()))
+            if (vY > 0 && pY + pH >= plat.getyPos() && pY + pH <= plat.getyPos() + plat.getHeight() && (pX >= plat.getxPos() && pX <= plat.getxPos() + plat.getWidth() - 5 || pX + pW >= plat.getxPos() + 5 && pX + pW <= plat.getxPos() + plat.getWidth()))
             {
                 vY = 0;
-                pY = plat.getY() - pH;
+                pY = plat.getyPos() - pH;
                 isJumping = false;
                 onPlat = true;
+                i = plats.size();
+            }
+            else if (vY < 0 && pY <= plat.getyPos() + plat.getHeight() - 10 && pY >= plat.getyPos() && (pX >= plat.getxPos() && pX <= plat.getxPos() + plat.getWidth() - 5 || pX + pW >= plat.getxPos() + 5 && pX + pW <= plat.getxPos() + plat.getWidth()))
+            {
+                vY = 0; // stop upward movement
+                pY = plat.getyPos() + plat.getHeight() - 10; // position player below the platform
+                vY = 0.2; // start downward movement to simulate bounce
+                isJumping = true;
+                onPlat = false;
                 i = plats.size();
             }
             else
@@ -182,20 +188,11 @@ public class Player extends JComponent
         }
     }
 
-    //All your UI drawing goes in here
-    /*public void drawPlayer(Graphics g)
-    {
-        // Drawing the body of the player
-        g.setColor(color);
-        g.fillRect(pX, pY, pW, pH);
-        // Drawing the head of the player
-    }
-    */
     public void drawPlayer(Graphics g, int screenWIDTH)
     {
         // Drawing the body of the player
         g.setColor(color);
-        g.fillRect(screenWIDTH/2 - pW/2, pY, pW, pH);
+        g.fillRect(screenWIDTH / 4 - pW / 2, pY, pW, pH);
         // Drawing the head of the player
     }
 }

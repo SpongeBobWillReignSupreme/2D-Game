@@ -5,8 +5,8 @@ import java.awt.*;
 public class Enemy
 {
     private static final Color col = Color.ORANGE;
-    private static final int eW = 50;
-    private static final int eH = 70;
+    private static final int eW = 40;
+    private static final int eH = 56;
 
     private int eX;
     private int eY;
@@ -17,7 +17,7 @@ public class Enemy
     public Enemy(int x)
     {
         eX = x;
-        eY = 365;
+        eY = 379;
         vX = 1;
         moveCount = 0;
     }
@@ -25,6 +25,8 @@ public class Enemy
     {
         eX = x;
         eY = y;
+        vX = 1;
+        moveCount = 0;
     }
 
     public int getX() { return eX; }
@@ -53,7 +55,6 @@ public class Enemy
         if(!p.getColor().equals(Color.RED) && (p.getX() + p.getWidth() >= eX && p.getX() + p.getWidth() <= eX + eW && p.getY() + p.getHeight() >= eY && p.getY() + p.getHeight() <= eY + eH/4 || p.getX() >= eX && p.getX() <= eX + eW + 5 && p.getY() + p.getHeight() >= eY && p.getY() + p.getHeight() <= eY + eH/4))
         {
             p.setVY(-15);
-
             return true;
         }
         else
@@ -99,6 +100,6 @@ public class Enemy
     {
         g.setColor(col);
         int distToPlayerX = eX - p.getX();
-        g.fillRect(screenWIDTH/2 - p.getWidth()/2 + distToPlayerX, eY, eW, eH);
+        g.fillRect(screenWIDTH/4 - p.getWidth()/2 + distToPlayerX, eY, eW, eH);
     }
 }

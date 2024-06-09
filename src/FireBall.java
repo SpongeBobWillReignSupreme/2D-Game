@@ -4,7 +4,7 @@ import java.awt.*;
 
 public class FireBall
 {
-    private static final int diam = 50;
+    private static final int diam = 40;
     private static final Color color = Color.GRAY;
 
     private int fX;
@@ -48,13 +48,13 @@ public class FireBall
         int distToPlayerX;
         if(p.getMovingLeft())
         {
-            distToPlayerX = p.getX() - fX + diam;
-            g.fillOval(screenWIDTH/2 - p.getWidth()/2 - distToPlayerX, fY, diam, diam);
+            distToPlayerX = p.getX() - fX + diam/2;
+            g.fillOval(screenWIDTH/4 - p.getWidth()/2 - distToPlayerX, fY, diam, diam);
         }
         else
         {
-            distToPlayerX = fX - p.getX();
-            g.fillOval(screenWIDTH / 2 + p.getWidth() / 2 + distToPlayerX, fY, diam, diam);
+            distToPlayerX = fX - p.getX() - diam/2;
+            g.fillOval(screenWIDTH/4 + p.getWidth()/2 + distToPlayerX, fY, diam, diam);
         }
     }
 }

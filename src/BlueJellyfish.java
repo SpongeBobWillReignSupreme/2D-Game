@@ -4,9 +4,12 @@ import java.awt.*;
 
 public class BlueJellyfish
 {
+    // Constants
+    private static final int diam = 45;
+
+    // Instance variables
     private int x;
     private int y;
-    private int diam;
     private Color col;
 
 
@@ -14,7 +17,6 @@ public class BlueJellyfish
     {
         x = xC;
         y = yC;
-        diam = 50;
         col = Color.BLUE;
     }
 
@@ -32,7 +34,7 @@ public class BlueJellyfish
     {
         g.setColor(col);
         int distToPlayerX = x - p.getX();
-        g.fillOval(screenWIDTH/2 - p.getWidth()/2 + distToPlayerX, y, diam, diam);
+        g.fillOval(screenWIDTH/4 - p.getWidth()/2 + distToPlayerX, y, diam, diam);
     }
     public boolean checkCatchBlue(Player p)
     {

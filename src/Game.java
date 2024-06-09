@@ -1,37 +1,43 @@
 package src;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
+import java.applet.Applet;
+import java.applet.AudioClip;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
 public class Game extends JComponent implements KeyListener, MouseListener, MouseMotionListener
 {
-    // Constant variables
+    // CONSTANT VARIABLES
     private static final int WIDTH = 1000;
     private static final int HEIGHT = 500;
     private static final int dirtHEIGHT = 450;
     private static final int grassHEIGHT = 435;
-    private static final int defaultPlatWIDTH = 250;
-    private static final int defaultPlatHEIGHT = 50;
     private static final int livesLeft = 3;
-    private static final int scoreboxWIDTH = 180;
+    private static final int scoreboxWIDTH = 195;
     private static final int scoreboxHEIGHT = 50;
-    private static final int scoreboxX = 800;
-    private static final int scoreboxY = 20;
+    private static final int scoreboxX = 785;
+    private static final int scoreboxY = 10;
     private static final int scoreboxFontSize = 30;
-    private static final int jellyfishY = 180;
+    private static final int defaultJellyfishY = 240;
     private static final int TICKS = 60;
     private static final long lifeLostDelay = 2100;
-    private static final long powerupDuration = 10000;
+    private static final long powerupDuration = 8000;
+    private static final int fireBallCooldown = 800;
+    private static final AudioClip fireBall = Applet.newAudioClip(Game.class.getResource("fire-spell.wav"));
 
-    // Instance variables
+    // INSTANCE VARIABLES
     private ArrayList<Jellyfish> regJellies = new ArrayList<>();
     private ArrayList<BlueJellyfish> blueJellies = new ArrayList<>();
     private ArrayList<Platform> platforms = new ArrayList<>();
     private ArrayList<Enemy> enemies = new ArrayList<>();
-    private Player player = new Player();
     private ArrayList<FireBall> fireBalls = new ArrayList<>();
+    private ArrayList<FloatingScore> floatingScores = new ArrayList<>();
+    private Player player = new Player();
     private Platform dirt;
     private Platform grass;
     private int score;
@@ -39,6 +45,9 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
     private long lastLifeLostTime;
     private boolean powerupActive;
     private long powerupStartTime;
+    private long lastFireBallTime;
+    private boolean isGameOver;
+    private long lastFootstepTime = 0;
 
     public Game()
     {
@@ -49,17 +58,17 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
     private void initializeGame()
     {
         // Adding regular jellies
-        regJellies.add(new Jellyfish(200, jellyfishY));
-        regJellies.add(new Jellyfish(700, jellyfishY));
+        regJellies.add(new Jellyfish(180, defaultJellyfishY));
+        regJellies.add(new Jellyfish(680, defaultJellyfishY));
         // Adding blue jellies
-        blueJellies.add(new BlueJellyfish(400, jellyfishY));
+        blueJellies.add(new BlueJellyfish(400, defaultJellyfishY));
         // Adding the plats for the ground
         dirt = new Platform(0, dirtHEIGHT, WIDTH, HEIGHT, new Color(87, 52, 41));
         grass = new Platform(0, grassHEIGHT, WIDTH, dirtHEIGHT - grassHEIGHT, Color.GREEN);
         // Adding the platforms
-        platforms.add(new Platform(600, 275, defaultPlatWIDTH, defaultPlatHEIGHT, Color.YELLOW));
-        platforms.add(new Platform(100, 275, defaultPlatWIDTH, defaultPlatHEIGHT, Color.YELLOW));
-        platforms.add(new Platform(1200, 275, defaultPlatWIDTH, defaultPlatHEIGHT, Color.YELLOW));
+        platforms.add(new Platform(100, 300, Color.YELLOW));
+        platforms.add(new Platform(600, 300, Color.YELLOW));
+        platforms.add(new Platform(1200, 300, Color.YELLOW));
         // Adding the enemies
         enemies.add(new Enemy(450));
         enemies.add(new Enemy(1500));
@@ -68,6 +77,7 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         playerLives = livesLeft;
         // Initializing powerupActive to false
         powerupActive = false;
+        isGameOver = false;
     }
 
     private void setupGUI()
@@ -92,15 +102,46 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
 
         player.movePlayer(e);
 
+        long currentTime = System.currentTimeMillis();
         if(key == 32 && powerupActive)
         {
             FireBall f = new FireBall(player);
-            if(player.getMovingLeft())
-                f.shootLeft();
-            else if(player.getMovingRight())
-                f.shootRight();
-            fireBalls.add(f);
+            if(currentTime - lastFireBallTime > fireBallCooldown)
+            {
+                if(player.getMovingLeft())
+                    f.shootLeft();
+                else if(player.getMovingRight())
+                    f.shootRight();
+                fireBalls.add(f);
+                lastFireBallTime = currentTime;
+                fireBall.play(); // Play the sound effect on JDK 9 or earlier
+                playSound("fire-spell.wav");
+            }
         }
+    }
+
+    public static synchronized void playSound(final String url)
+    {
+        new Thread(new Runnable()
+        {
+            // The wrapper thread is unnecessary, unless it blocks on the
+            // Clip finishing; see comments.
+            public void run()
+            {
+                try
+                {
+                    Clip clip = AudioSystem.getClip();
+                    AudioInputStream inputStream = AudioSystem.getAudioInputStream(
+                            Game.class.getResourceAsStream("/src/SoundEffects/" + url));
+                    clip.open(inputStream);
+                    clip.start();
+                }
+                catch (Exception e)
+                {
+                    System.err.println(e.getMessage());
+                }
+            }
+        }).start();
     }
 
     public void paintComponent(Graphics g)
@@ -112,7 +153,9 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         drawFireBalls(g);
         drawPlatforms(g);
         drawEnemies(g);
+        drawFloatingScores(g);
         drawScorebox(g);
+        drawLossScene(g);
     }
 
     private void drawBackground(Graphics g)
@@ -150,6 +193,7 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
     {
         for(FireBall f: fireBalls)
             f.drawFireBall(g, WIDTH, player);
+
     }
 
     private void drawPlatforms(Graphics g)
@@ -164,6 +208,14 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
             enemy.drawSelf(g, WIDTH, player);
     }
 
+    private void drawFloatingScores(Graphics g)
+    {
+        for(FloatingScore fs : floatingScores)
+        {
+            fs.draw(g, WIDTH, player);
+        }
+    }
+
     private void drawScorebox(Graphics g)
     {
         g.setColor(Color.GRAY);
@@ -173,6 +225,18 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         g.setColor(Color.BLACK);
         g.drawString("Score = " + score, scoreboxX + 5, scoreboxY + 40);
     }
+    public void drawLossScene(Graphics g)
+    {
+        if(isGameOver)
+        {
+            g.setColor(Color.GRAY);
+            g.fillRect(0, 0, WIDTH, HEIGHT);
+            Font font = new Font("AR Darling", Font.BOLD, 100);
+            g.setFont(font);
+            g.setColor(Color.WHITE);
+            g.drawString("Game Over", WIDTH/2 - 250, HEIGHT/2);
+        }
+    }
 
     public void loop()
     {
@@ -181,6 +245,8 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         handleJellyfishes(currentTime);
         handleEnemies(currentTime);
         handleFireBalls();
+        handleFloatingScores();
+        handleLossSound();
 
         repaint();
     }
@@ -195,6 +261,7 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
                 regJellies.remove(i);
                 i--;
                 score += 100;
+                floatingScores.add(new FloatingScore("+100", jellyfish.getX() + jellyfish.getDiam()/2, jellyfish.getY()));
             }
         }
         for(int i = 0; i < blueJellies.size(); i++)
@@ -205,6 +272,7 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
                 blueJellies.remove(i);
                 i--;
                 score += 200;
+                floatingScores.add(new FloatingScore("+200", blueJellyfish.getX() + blueJellyfish.getDiam()/2, blueJellyfish.getY()));
                 player.setColor(Color.BLUE);
                 powerupActive = true;
                 powerupStartTime = currentTime;
@@ -251,6 +319,8 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
                 {
                     enemies.remove(i);
                     score += 50;
+                    floatingScores.add(new FloatingScore("+50", enemy.getX() + enemy.getWidth()/2, enemy.getY()));
+                    playSound("beep.wav");
                 }
             }
             for(int a = 0; a < fireBalls.size(); a++)
@@ -261,6 +331,8 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
                     enemies.remove(i);
                     fireBalls.remove(a);
                     score += 50;
+                    playSound("beep.wav");
+                    floatingScores.add(new FloatingScore("+50", enemy.getX() + enemy.getWidth()/2, enemy.getY()));
                 }
             }
             if(currentTime - lastLifeLostTime > lifeLostDelay && !player.getColor().equals(Color.BLUE))
@@ -275,8 +347,29 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         if(!powerupActive)
         {
             player.setColor(Color.RED);
+            score -= 50;
+            floatingScores.add(new FloatingScore("-50", player.getX() + player.getWidth()/2, player.getY()));
             playerLives--;
             lastLifeLostTime = currentTime;
+        }
+    }
+
+    private void handleFloatingScores()
+    {
+        for (FloatingScore fs : floatingScores)
+        {
+            fs.act();
+        }
+        floatingScores.removeIf(fs -> fs.getY() < 0); // remove if off the screen
+    }
+
+    public void handleLossSound()
+    {
+        if(playerLives <= 0 && !isGameOver)
+        {
+            //playSound("dead-8bit.wav");
+            playSound("end.wav");
+            isGameOver = true;
         }
     }
 
