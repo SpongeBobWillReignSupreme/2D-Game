@@ -16,7 +16,7 @@ public class Player extends JComponent
     private int pX;
     private int pY;
     private int vX;
-    private double vY;
+    private int vY;
     private boolean isJumping;
     private boolean onPlat;
     private Color color;
@@ -28,7 +28,7 @@ public class Player extends JComponent
     {
         //initializing instance variables
         pX = 70;
-        pY = 355;
+        pY = 365;
         vX = 0;
         vY = 0;
         isJumping = false;
@@ -42,10 +42,11 @@ public class Player extends JComponent
     public int getY() { return pY; }
     public Color getColor() { return color; }
     public int getVX() { return vX; }
-    public double getVY() { return vY; }
+    public int getVY() { return vY; }
     public boolean getIsJumping() { return isJumping; }
     public boolean getMovingLeft() { return movingLeft; }
     public boolean getMovingRight() { return movingRight; }
+    public boolean getOnPlat() { return onPlat; }
     public void setColor(Color c) { color = c; }
     public void setX(int x) { pX = x; }
     public void setY(int y) { pY = y; }
@@ -57,24 +58,16 @@ public class Player extends JComponent
         int key = e.getKeyCode();
         if(key == 65) // Left
         {
-            //pX -= 10;
-            //hX -= 10;
             vX = -10;
             movingLeft = true;
             movingRight = false;
         }
         if(key == 68) // Right
         {
-            //pX += 10;
-            //hX += 10;
             vX = 10;
             movingRight = true;
             movingLeft = false;
         }
-        /*else if(key == 38)
-        {
-            //vY = -10;
-        }*/
         if(key == 87) // Up
         {
             if(!isJumping && vY == 0)
@@ -115,7 +108,6 @@ public class Player extends JComponent
         else
             onPlat = false;
 
-
         if(pY + pH >= floor && !onPlat)//landing on the floor
         {
             //System.out.println("on floor");
@@ -145,7 +137,7 @@ public class Player extends JComponent
         for(int i = 0; i < plats.size(); i++)
         {
             Platform plat = plats.get(i);
-            if (vY > 0 && pY + pH >= plat.getY() && pY + pH <= plat.getY() + plat.getHeight() && (pX >= plat.getX() && pX <= plat.getX() + plat.getWidth() - 5 || pX + pW >= plat.getX() + 5 && pX + pW <= plat.getX() + plat.getWidth()))
+            if(vY > 0 && pY + pH >= plat.getY() && pY + pH <= plat.getY() + plat.getHeight() && (pX >= plat.getX() && pX <= plat.getX() + plat.getWidth() - 5 || pX + pW >= plat.getX() + 5 && pX + pW <= plat.getX() + plat.getWidth()))
             {
                 vY = 0;
                 pY = plat.getY() - pH;
@@ -153,18 +145,19 @@ public class Player extends JComponent
                 onPlat = true;
                 i = plats.size();
             }
-            else if(vY < 0 && pY <= plat.getY() + plat.getHeight() - 10 && pY >= plat.getY() && (pX >= plat.getX() && pX <= plat.getX() + plat.getWidth() - 5 || pX + pW >= plat.getX() + 5 && pX + pW <= plat.getX() + plat.getWidth()))
-            {
-                vY = 0; // stop upward movement
-                pY = plat.getY() + plat.getHeight() - 10; // position player below the platform
-                vY = 0.2; // start downward movement to simulate bounce
-                i = plats.size();
-                onPlat = false;
-            }
             else
             {
                 onPlat = false;
             }
+            /*else if(vY < 0 && pY <= plat.getY() + plat.getHeight() - 10 && pY >= plat.getY() && (pX >= plat.getX() && pX <= plat.getX() + plat.getWidth() - 5 || pX + pW >= plat.getX() + 5 && pX + pW <= plat.getX() + plat.getWidth()))
+            {
+                vY = 0; // stop upward movement
+                pY = plat.getY() + plat.getHeight() - 10; // position player below the platform
+                vY = 1; // start downward movement to simulate bounce
+                i = plats.size();
+                onPlat = false;
+            }
+            */
 
             if (pY + pH >= floor && !onPlat)//landing on the floor
             {
@@ -188,7 +181,7 @@ public class Player extends JComponent
     {
         // Drawing the body of the player
         g.setColor(color);
-        g.fillRect(screenWIDTH / 4 - pW / 2, pY, pW, pH);
+        g.fillRect(screenWIDTH/4 - pW/2, pY, pW, pH);
         // Drawing the head of the player
     }
 }
