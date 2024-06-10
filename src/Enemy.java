@@ -1,6 +1,7 @@
 package src;
 
 import java.awt.*;
+import java.awt.image.ImageObserver;
 
 public class Enemy
 {
@@ -91,15 +92,14 @@ public class Enemy
         else
             return false;
     }
-    public void drawSelf(Graphics g)
+    public void drawEnemy(Graphics g)
     {
         g.setColor(col);
         g.fillRect(eX, eY, eW, eH);
     }
-    public void drawSelf (Graphics g, int screenWIDTH, Player p)
+    public void drawEnemy(Graphics g2d, Image enemy, int screenWIDTH, Player p, ImageObserver obs)
     {
-        g.setColor(col);
         int distToPlayerX = eX - p.getX();
-        g.fillRect(screenWIDTH/4 - p.getWidth()/2 + distToPlayerX, eY, eW, eH);
+        g2d.drawImage(enemy, screenWIDTH/4 - p.getWidth()/2 + distToPlayerX, eY, eW, eH, obs);
     }
 }

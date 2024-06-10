@@ -1,5 +1,8 @@
 package src;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -112,73 +115,113 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
                 fireBalls.add(f);
                 lastFireBallTime = currentTime;
                 //fireBall.play(); // Play the sound effect on JDK 9 or earlier
-                //playSound("fire-spell.wav");
+                playSound("fire-spell.wav");
             }
         }
     }
 
     public void paintComponent(Graphics g)
     {
-        drawBackground(g);
+        // For images
+        Graphics2D g2d;
+        g2d = (Graphics2D)g;
+
+        // Regular shapes
+        drawBackground(g2d);
         drawGround(g);
         drawJellyfishes(g);
-        drawPlayer(g);
-        drawFireBalls(g);
-        drawPlatforms(g);
+        //drawPlayer(g);
         drawEnemies(g);
+        drawFireBalls(g2d);
+        drawPlatforms(g);
+        drawPlayer(g2d);
         drawFloatingScores(g);
         drawScorebox(g);
+        drawHearts(g2d);
         drawLossScene(g);
     }
 
-    private void drawBackground(Graphics g)
+    private void drawBackground(Graphics g2d)
     {
-        g.setColor(new Color(Color.HSBtoRGB(0.56f, 0.3f, 0.9f)));
-        g.fillRect(0, 0, WIDTH, HEIGHT);
+        if(!isGameOver)
+        {
+            ImageIcon backgroundIcon = new ImageIcon(Game.class.getResource("Images/background.png"));
+            Image background = backgroundIcon.getImage();
+            g2d.drawImage(background, 0, 0, WIDTH, grassHEIGHT, null);
+        }
     }
 
     private void drawGround(Graphics g)
     {
-        dirt.drawSelf(g);
-        grass.drawSelf(g);
+        if(!isGameOver)
+        {
+            dirt.drawSelf(g);
+            grass.drawSelf(g);
+        }
     }
 
     private void drawJellyfishes(Graphics g)
     {
-        // Drawing regular jellies
-        for(Jellyfish jellyfish : regJellies)
+        if(!isGameOver)
         {
-            jellyfish.drawSelf(g, WIDTH, player);
-        }
-        // Drawing blue jellies
-        for(BlueJellyfish blueJellyfish : blueJellies)
-        {
-            blueJellyfish.drawSelf(g, WIDTH, player);
+            // Drawing regular jellies
+            for (Jellyfish jellyfish : regJellies)
+            {
+                jellyfish.drawSelf(g, WIDTH, player);
+            }
+            // Drawing blue jellies
+            for (BlueJellyfish blueJellyfish : blueJellies)
+            {
+                blueJellyfish.drawSelf(g, WIDTH, player);
+            }
         }
     }
 
-    private void drawPlayer(Graphics g)
+    private void drawFireBalls(Graphics g2d)
     {
-        player.drawPlayer(g, WIDTH);
-    }
-
-    private void drawFireBalls(Graphics g)
-    {
-        for(FireBall f: fireBalls)
-            f.drawFireBall(g, WIDTH, player);
-
+        if(!isGameOver)
+        {
+            ImageIcon fireballIcon = new ImageIcon(Game.class.getResource("Images/fireball.png"));
+            Image fireball = fireballIcon.getImage();
+            for(FireBall f : fireBalls)
+            {
+                f.drawFireBall(g2d, fireball, WIDTH, player, null);
+            }
+        }
     }
 
     private void drawPlatforms(Graphics g)
     {
-        for (Platform platform : platforms)
-            platform.drawSelf(g, WIDTH, player);
+        if(!isGameOver)
+        {
+            for(Platform platform : platforms)
+            {
+                platform.drawSelf(g, WIDTH, player);
+            }
+        }
     }
 
-    private void drawEnemies(Graphics g)
+    private void drawEnemies(Graphics g2d)
     {
-        for (Enemy enemy : enemies)
-            enemy.drawSelf(g, WIDTH, player);
+        if(!isGameOver)
+        {
+            ImageIcon enemyIcon = new ImageIcon(Game.class.getResource("Images/vital.png"));
+            Image enemyI = enemyIcon.getImage();
+            for(Enemy e : enemies)
+            {
+                e.drawEnemy(g2d, enemyI, WIDTH, player, null);
+            }
+        }
+    }
+
+    private void drawPlayer(Graphics2D g2d)
+    {
+        int pWidth = player.getWidth() + 80;
+        int pHeight = player.getHeight() + 20;
+        int y = player.getY();
+        ImageIcon playerIcon = new ImageIcon(Game.class.getResource("Images/aron.png"));
+        Image player = playerIcon.getImage();
+        g2d.drawImage(player, WIDTH/4 - pWidth/2, y - 10, pWidth, pHeight, null);
     }
 
     private void drawFloatingScores(Graphics g)
@@ -198,6 +241,27 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         g.setColor(Color.BLACK);
         g.drawString("Score = " + score, scoreboxX + 5, scoreboxY + 40);
     }
+    private void drawHearts(Graphics2D g2d)
+    {
+        ImageIcon heartIcon = new ImageIcon(Game.class.getResource("Images/heart.png"));
+        Image heart = heartIcon.getImage();
+        if(playerLives == 3)
+        {
+            g2d.drawImage(heart, 30, 30, 40, 40, null);
+            g2d.drawImage(heart, 80, 30, 40, 40, null);
+            g2d.drawImage(heart, 130, 30, 40, 40, null);
+        }
+        else if(playerLives == 2)
+        {
+            g2d.drawImage(heart, 30, 30, 40, 40, null);
+            g2d.drawImage(heart, 80, 30, 40, 40, null);
+        }
+        else if(playerLives == 1)
+        {
+            g2d.drawImage(heart, 30, 30, 40, 40, null);
+        }
+    }
+
     public void drawLossScene(Graphics g)
     {
         if(isGameOver)
@@ -283,19 +347,18 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
             enemy.enemyMove();
             if(player.getColor().equals(Color.ORANGE))
             {
-                /*if(enemy.checkTouch(player))
+                if(enemy.checkTouch(player))
                 {
                     handlePlayerTouchedByEnemy(currentTime);
                     System.out.println("Player lives: " + playerLives);
                     System.out.println("poop");
                 }
-                 */
                 if(enemy.checkStomp(player))
                 {
                     enemies.remove(i);
                     score += 50;
                     floatingScores.add(new FloatingScore("+50", enemy.getX() + enemy.getWidth()/2, enemy.getY()));
-                    //playSound("beep.wav");
+                    playSound("beep.wav");
                     player.setColor(Color.ORANGE);
                     System.out.println("true " + player.getX() + " " + player.getY() + " " + enemy.getX() + " " + enemy.getY() + " " + player.getIsJumping() + " " + player.getOnPlat() + " " + player.getVY() + "\n");
                 }
@@ -317,7 +380,7 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
                     enemies.remove(i);
                     fireBalls.remove(a);
                     score += 50;
-                    //playSound("beep.wav");
+                    playSound("beep.wav");
                     floatingScores.add(new FloatingScore("+50", enemy.getX() + enemy.getWidth()/2, enemy.getY()));
                 }
             }
@@ -354,7 +417,7 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         if(playerLives <= 0 && !isGameOver)
         {
             //playSound("dead-8bit.wav");
-            //playSound("end.wav");
+            playSound("end.wav");
             isGameOver = true;
         }
     }
@@ -364,7 +427,7 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         player.stopHorizontal(e);
     }
 
-    /*public static synchronized void playSound(final String url)
+    public static synchronized void playSound(final String url)
     {
         new Thread(new Runnable()
         {
@@ -387,7 +450,6 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
             }
         }).start();
     }
-     */
 
     public void start(final int ticks) {
         Thread gameThread = new Thread() {

@@ -145,11 +145,7 @@ public class Player extends JComponent
                 onPlat = true;
                 i = plats.size();
             }
-            else
-            {
-                onPlat = false;
-            }
-            /*else if(vY < 0 && pY <= plat.getY() + plat.getHeight() - 10 && pY >= plat.getY() && (pX >= plat.getX() && pX <= plat.getX() + plat.getWidth() - 5 || pX + pW >= plat.getX() + 5 && pX + pW <= plat.getX() + plat.getWidth()))
+            else if(vY < 0 && pY <= plat.getY() + plat.getHeight() - 10 && pY >= plat.getY() && (pX >= plat.getX() && pX <= plat.getX() + plat.getWidth() - 5 || pX + pW >= plat.getX() + 5 && pX + pW <= plat.getX() + plat.getWidth()))
             {
                 vY = 0; // stop upward movement
                 pY = plat.getY() + plat.getHeight() - 10; // position player below the platform
@@ -157,7 +153,10 @@ public class Player extends JComponent
                 i = plats.size();
                 onPlat = false;
             }
-            */
+            else
+            {
+                onPlat = false;
+            }
 
             if (pY + pH >= floor && !onPlat)//landing on the floor
             {

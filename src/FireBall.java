@@ -1,6 +1,7 @@
 package src;
 
 import java.awt.*;
+import java.awt.image.ImageObserver;
 
 public class FireBall
 {
@@ -27,34 +28,23 @@ public class FireBall
     public int getY() { return fY; }
     public int getDiam() { return diam; }
 
-    public void shootLeft()
-    {
-        vX = -20;
-    }
+    public void shootLeft() { vX = -20; }
+    public void shootRight() { vX = 20; }
 
-    public void shootRight()
-    {
-        vX = 20;
-    }
+    public void act() { fX += vX; }
 
-    public void act()
+    public void drawFireBall(Graphics g2d, Image fireball, int screenWIDTH, Player p, ImageObserver obs)
     {
-        fX += vX;
-    }
-
-    public void drawFireBall(Graphics g, int screenWIDTH, Player p)
-    {
-        g.setColor(color);
         int distToPlayerX;
         if(p.getMovingLeft())
         {
             distToPlayerX = p.getX() - fX + diam/2;
-            g.fillOval(screenWIDTH/4 - p.getWidth()/2 - distToPlayerX, fY, diam, diam);
+            g2d.drawImage(fireball, screenWIDTH/4 - p.getWidth()/2 - distToPlayerX, fY, diam, diam, obs);
         }
         else
         {
             distToPlayerX = fX - p.getX() - diam/2;
-            g.fillOval(screenWIDTH/4 + p.getWidth()/2 + distToPlayerX, fY, diam, diam);
+            g2d.drawImage(fireball, screenWIDTH/4 + p.getWidth()/2 + distToPlayerX, fY, diam, diam, obs);
         }
     }
 }
