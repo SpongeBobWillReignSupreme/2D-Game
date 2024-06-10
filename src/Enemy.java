@@ -55,7 +55,7 @@ public class Enemy
         // If the players right side is in between the x of the right and left side of the enemy; the players bottom is touching the top of the enemy(5 pixels of leeway); OR the players left side is in between the x of the right and left side of the enemy; the players bottom is touching the top of the enemy(5 pixels of leeway)
         if(!p.getColor().equals(Color.RED) && (p.getX() + p.getWidth() >= eX && p.getX() + p.getWidth() <= eX + eW && p.getY() + p.getHeight() >= eY && p.getY() + p.getHeight() <= eY + eH/4 || p.getX() >= eX && p.getX() <= eX + eW + 5 && p.getY() + p.getHeight() >= eY && p.getY() + p.getHeight() <= eY + eH/4))
         {
-            p.setVY(-15);
+            p.setVY(-10);
             return true;
         }
         else
@@ -67,7 +67,7 @@ public class Enemy
     {
         if((!p.getColor().equals(Color.RED)) && (p.getX() + p.getWidth() >= eX && p.getX() + p.getWidth() <= eX + eW && p.getY() + p.getHeight()/2 > eY && p.getY() + p.getHeight()/2 <= eY + eH) || (p.getX() >= eX && p.getX() <= eX + eW && p.getY() + p.getHeight()/2 > eY && p.getY() + p.getHeight()/2 <= eY + eH))
         {
-            p.setVY(-15);
+            p.setVY(-10);
 
             if(eX > p.getX() && p.getVX() == 0)
             {

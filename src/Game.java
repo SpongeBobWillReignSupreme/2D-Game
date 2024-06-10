@@ -28,6 +28,7 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
     private static final int fireBallCooldown = 800;
     private static final int interval = 100;
     private static final int gameTimer = 90000;
+    private static final int reachEndX = 10000;
     //private static final AudioClip fireBall = Applet.newAudioClip(Game.class.getResource("fire-spell.wav"));
 
     // INSTANCE VARIABLES
@@ -124,7 +125,7 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
 
     public void setupLevel()
     {
-        if(!isGameOver && !onMenu && !onLevelSelect)
+        if(!onMenu && !onLevelSelect)
         {
             if(onLevel1)
             {
@@ -213,8 +214,9 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         drawPlayer(g2d);
         drawFloatingScores(g);
         drawScorebox(g);
+        drawTimer(g2d);
         drawHearts(g2d);
-        drawLossScene(g, currentTime);
+        drawEndScene(g, currentTime);
         drawMenu(g2d);
         drawLevelSelect(g2d);
     }
@@ -308,10 +310,12 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
             int y = player.getY();
 
             ImageIcon playerIcon;
-            if(!powerupActive)
-                playerIcon = new ImageIcon(Game.class.getResource("Images/aron.png"));
-            else
+            if(powerupActive)
                 playerIcon = new ImageIcon(Game.class.getResource("Images/poweredaron.png"));
+            else if(player.getColor().equals(Color.RED))
+                playerIcon = new ImageIcon(Game.class.getResource("Images/aronhurt.png"));
+            else
+                playerIcon = new ImageIcon(Game.class.getResource("Images/aron.png"));
             Image player = playerIcon.getImage();
             g2d.drawImage(player, WIDTH / 4 - pWidth / 2, y - 10, pWidth, pHeight, null);
 
@@ -340,6 +344,23 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         g.setColor(Color.BLACK);
         g.drawString("Score: " + score, scoreboxX + 5, scoreboxY + 35);
     }
+    private void drawTimer(Graphics2D g2d)
+    {
+        g2d.setColor(Color.BLACK);
+        g2d.fillRoundRect(scoreboxX - 172, scoreboxY - 2, scoreboxWIDTH - 31, scoreboxHEIGHT + 4, 20, 20);
+        g2d.setColor(Color.WHITE);
+        g2d.fillRoundRect(scoreboxX - 170, scoreboxY, scoreboxWIDTH - 35, scoreboxHEIGHT, 20, 20);
+        long currentTime = System.currentTimeMillis();
+        long timeLeft = gameTimer - (currentTime - gameStartTime);
+        int seconds = (int)timeLeft / 1000;
+        int minutes = seconds / 60;
+        seconds = seconds % 60;
+        String time = minutes + ":" + seconds;
+        Font font = new Font("Arial", Font.BOLD, 30);
+        g2d.setFont(font);
+        g2d.setColor(Color.BLACK);
+        g2d.drawString("Time: " + time, scoreboxX - 165, scoreboxY + 35);
+    }
     private void drawHearts(Graphics2D g2d)
     {
         ImageIcon heartIcon = new ImageIcon(Game.class.getResource("Images/heart.png"));
@@ -360,8 +381,7 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
             g2d.drawImage(heart, 30, 30, 40, 40, null);
         }
     }
-
-    public void drawLossScene(Graphics g2d, long currentTime)
+    public void drawEndScene(Graphics g2d, long currentTime)
     {
         if(isGameOver)
         {
@@ -370,35 +390,93 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
                 ImageIcon lossPage = new ImageIcon(Game.class.getResource("Images/loss.png"));
                 Image loss = lossPage.getImage();
                 g2d.drawImage(loss, 0, 0, WIDTH, HEIGHT, null);
-                Font font = new Font("AR Darling", Font.BOLD, 100);
+                Font font = new Font("Times New Roman", Font.BOLD, 100);
                 g2d.setFont(font);
                 g2d.setColor(Color.WHITE);
-                g2d.drawString("Game Over", WIDTH/2 - 250, HEIGHT/2 - 150);
-                Font font2 = new Font("AR Darling", Font.BOLD, 25);
+                g2d.drawString("Game Over", WIDTH/2 - 275, HEIGHT/2 - 150);
+                Font font2 = new Font("Arial", Font.BOLD, 25);
                 g2d.setFont(font2);
-                g2d.drawString("You Ran Out Of Lives", WIDTH/2 - 140, HEIGHT/2 + 100);
+                g2d.drawString("You Ran Out Of Lives", WIDTH/2 - 140, HEIGHT/2 - 100);
+
+                // Adding try again button
+                g2d.setColor(Color.BLACK);
+                g2d.fillRoundRect(WIDTH/2 - 143, HEIGHT/2 - 55, 250, 85, 20, 20);
+                g2d.setColor(Color.WHITE);
+                g2d.fillRoundRect(WIDTH/2 - 138, HEIGHT/2 - 50, 240, 75, 20, 20);
+                g2d.setColor(Color.BLACK);
+                Font font3 = new Font("Arial", Font.BOLD, 50);
+                g2d.setFont(font3);
+                g2d.drawString("Try Again", WIDTH/2 - 133, HEIGHT/2 + 5);
+
+                // Adding quit button
+                g2d.setColor(Color.BLACK);
+                g2d.fillRoundRect(WIDTH/2 - 105, HEIGHT/2 + 55, 175, 85, 20, 20);
+                g2d.setColor(Color.WHITE);
+                g2d.fillRoundRect(WIDTH/2 - 100, HEIGHT/2 + 60, 165, 75, 20, 20);
+                g2d.setColor(Color.BLACK);
+                g2d.setFont(font3);
+                g2d.drawString("Quit", WIDTH/2 - 73, HEIGHT/2 + 115);
             }
             else if(currentTime - gameStartTime > gameTimer)
             {
                 ImageIcon lossPage = new ImageIcon(Game.class.getResource("Images/loss.png"));
                 Image loss = lossPage.getImage();
                 g2d.drawImage(loss, 0, 0, WIDTH, HEIGHT, null);
-                g2d.setColor(Color.GRAY);
-                g2d.fillRect(0, 0, WIDTH, HEIGHT);
-                Font font = new Font("AR Darling", Font.BOLD, 100);
+                Font font = new Font("Times New Roman", Font.BOLD, 100);
                 g2d.setFont(font);
                 g2d.setColor(Color.WHITE);
-                g2d.drawString("Game Over", WIDTH/2 - 250, HEIGHT/2 - 150);
-                Font font2 = new Font("AR Darling", Font.PLAIN, 25);
+                g2d.drawString("Game Over", WIDTH/2 - 275, HEIGHT/2 - 150);
+                Font font2 = new Font("Arial", Font.BOLD, 25);
                 g2d.setFont(font2);
-                g2d.drawString("You Ran Out Of Time", WIDTH/2 - 200, HEIGHT/2 + 100);
+                g2d.drawString("You Ran Out Of Time", WIDTH/2 - 140, HEIGHT/2 - 100);
+
+                // Adding try again button
+                g2d.setColor(Color.BLACK);
+                g2d.fillRoundRect(WIDTH/2 - 143, HEIGHT/2 - 55, 250, 85, 20, 20);
+                g2d.setColor(Color.WHITE);
+                g2d.fillRoundRect(WIDTH/2 - 138, HEIGHT/2 - 50, 240, 75, 20, 20);
+                g2d.setColor(Color.BLACK);
+                Font font3 = new Font("Arial", Font.BOLD, 50);
+                g2d.setFont(font3);
+                g2d.drawString("Try Again", WIDTH/2 - 133, HEIGHT/2 + 5);
+
+                // Adding quit button
+                g2d.setColor(Color.BLACK);
+                g2d.fillRoundRect(WIDTH/2 - 105, HEIGHT/2 + 55, 175, 85, 20, 20);
+                g2d.setColor(Color.WHITE);
+                g2d.fillRoundRect(WIDTH/2 - 100, HEIGHT/2 + 60, 165, 75, 20, 20);
+                g2d.setColor(Color.BLACK);
+                g2d.setFont(font3);
+                g2d.drawString("Quit", WIDTH/2 - 73, HEIGHT/2 + 115);
             }
-            else
+            else if(player.getX() >= reachEndX)
             {
-                Font font = new Font("AR Darling", Font.BOLD, 100);
+                ImageIcon winPage = new ImageIcon(Game.class.getResource("Images/win.png"));
+                Image win = winPage.getImage();
+                g2d.drawImage(win, 0, 0, WIDTH, HEIGHT, null);
+                Font font = new Font("Times New Roman", Font.BOLD, 100);
                 g2d.setFont(font);
                 g2d.setColor(Color.WHITE);
-                g2d.drawString("You Won", WIDTH/2 - 200, HEIGHT/2 + 100);
+                g2d.drawString("You Won", WIDTH/2 - 200, HEIGHT/2 - 150);
+
+                // Adding play again button
+                g2d.setColor(Color.BLACK);
+                g2d.fillRoundRect(WIDTH/2 - 143, HEIGHT/2 - 55, 250, 85, 20, 20);
+                g2d.setColor(Color.WHITE);
+                g2d.fillRoundRect(WIDTH/2 - 138, HEIGHT/2 - 50, 240, 75, 20, 20);
+                g2d.setColor(Color.BLACK);
+                Font font3 = new Font("Arial", Font.BOLD, 50);
+                g2d.setFont(font3);
+                g2d.drawString("Try Again", WIDTH/2 - 133, HEIGHT/2 + 5);
+
+                // Adding quit button
+                g2d.setColor(Color.BLACK);
+                g2d.fillRoundRect(WIDTH/2 - 105, HEIGHT/2 + 55, 175, 85, 20, 20);
+                g2d.setColor(Color.WHITE);
+                g2d.fillRoundRect(WIDTH/2 - 100, HEIGHT/2 + 60, 165, 75, 20, 20);
+                g2d.setColor(Color.BLACK);
+                g2d.setFont(font3);
+                g2d.drawString("Quit", WIDTH/2 - 73, HEIGHT/2 + 115);
             }
         }
     }
@@ -407,12 +485,14 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         if(onMenu)
         {
             // Adding Title
+            ImageIcon menuPage = new ImageIcon(Game.class.getResource("Images/win.png"));
+            Image menu = menuPage.getImage();
             g2d.setColor(Color.GRAY);
-            g2d.fillRect(0, 0, WIDTH, HEIGHT);
+            g2d.drawImage(menu,0, 0, WIDTH, HEIGHT, null);
             Font font = new Font("Times New Roman", Font.BOLD, 100);
             g2d.setFont(font);
-            g2d.setColor(Color.WHITE);
-            g2d.drawString("Jellyfish Jam", WIDTH/2 - 275, HEIGHT/2 - 90);
+            g2d.setColor(Color.PINK);
+            g2d.drawString("Jellyfish Jam", WIDTH/2 - 275, HEIGHT/2 - 100);
 
             // Adding play button
             g2d.setColor(Color.BLACK);
@@ -437,13 +517,14 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
     {
         if(onLevelSelect)
         {
-            g2d.setColor(Color.GRAY);
-            g2d.fillRect(0, 0, WIDTH, HEIGHT);
+            ImageIcon winPage = new ImageIcon(Game.class.getResource("Images/win.png"));
+            Image win = winPage.getImage();
+            g2d.drawImage(win, 0, 0, WIDTH, HEIGHT, null);
 
             // Drawing the select title
             Font font = new Font("Times New Roman", Font.BOLD, 100);
             g2d.setFont(font);
-            g2d.setColor(Color.WHITE);
+            g2d.setColor(Color.PINK);
             g2d.drawString("Select Level", WIDTH / 2 - 260, HEIGHT / 2 - 95);
 
             // Drawing the level 1 button
@@ -466,7 +547,7 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         handleEnemies(currentTime);
         handleFireBalls();
         handleFloatingScores();
-        handleLossSound();
+        handleLoss(currentTime);
 
         repaint();
     }
@@ -598,13 +679,28 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         floatingScores.removeIf(fs -> fs.getY() < 0); // remove if off the screen
     }
 
-    public void handleLossSound()
+    public void handleLoss(long currentTime)
     {
-        if(playerLives <= 0 && !isGameOver)
+        if(!isGameOver && !onMenu && !onLevelSelect)
         {
-            //playSound("dead-8bit.wav");
-            playSound("end.wav");
-            isGameOver = true;
+            if(player.getX() >= reachEndX)
+            {
+                isGameOver = true;
+                playSound("winsound.wav");
+            }
+            else if(playerLives <= 0)
+            {
+                //playSound("dead-8bit.wav");
+                playSound("end.wav");
+                isGameOver = true;
+            }
+            else if(currentTime - gameStartTime > gameTimer)
+            {
+                System.out.println("currentTime: " + currentTime + " gameStartTime: " + gameStartTime + " gameTimer: " + gameTimer);
+                //playSound("dead-8bit.wav");
+                playSound("end.wav");
+                isGameOver = true;
+            }
         }
     }
 
@@ -675,7 +771,7 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
                 onMenu = false;
             }
 
-            if (mouseX >= WIDTH / 2 - 105 && mouseX <= WIDTH + 105 && mouseY >= HEIGHT - HEIGHT / 4 - 5 && mouseY <= HEIGHT - HEIGHT / 4 + 80)
+            if(mouseX >= WIDTH / 2 - 105 && mouseX <= WIDTH + 105 && mouseY >= HEIGHT - HEIGHT / 4 - 5 && mouseY <= HEIGHT - HEIGHT / 4 + 80)
             {
                 System.exit(0);
             }
@@ -687,6 +783,18 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
                 onLevelSelect = false;
                 onLevel1 = true;
                 setupLevel();
+                gameStartTime = System.currentTimeMillis();
+            }
+        }
+        else if(isGameOver)
+        {
+            if(mouseX >= WIDTH/2 - 143 && mouseX <= WIDTH/2 + 107 && mouseY >= HEIGHT/2 - 55 && mouseY <= HEIGHT/2 + 30)
+            {
+                initializeGame();
+            }
+            if(mouseX >= WIDTH/2 - 105 && mouseX <= WIDTH/2 + 70 && mouseY >= HEIGHT/2 + 55 && mouseY <= HEIGHT/2 + 140)
+            {
+                System.exit(0);
             }
         }
     }
