@@ -72,7 +72,7 @@ public class Player extends JComponent
         {
             if(!isJumping && vY == 0)
             {
-                vY = -25;
+                vY = -30;
                 isJumping = true;
                 onPlat = false;
             }

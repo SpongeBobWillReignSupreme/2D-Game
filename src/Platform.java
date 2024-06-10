@@ -36,11 +36,11 @@ public class Platform
         g.setColor(color);
         g.fillRect(xPos, yPos, platW, platH);
     }
-    public void drawSelf (Graphics g, int screenWIDTH, Player p)
+    public void drawSelf (Graphics g2d, int screenWIDTH, Player p)
     {
-        g.setColor(color);
+        g2d.setColor(color);
         int distToPlayerX = xPos - p.getX();
-        g.fillRect(screenWIDTH/4 - p.getWidth()/2 + distToPlayerX, yPos, platW, platH);
+        g2d.fillRoundRect(screenWIDTH/4 - p.getWidth()/2 + distToPlayerX, yPos, platW, platH, 20, 20);
     }
 }
 

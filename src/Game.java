@@ -68,9 +68,7 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         dirt = new Platform(0, dirtHEIGHT, WIDTH, HEIGHT, new Color(87, 52, 41));
         grass = new Platform(0, grassHEIGHT, WIDTH, dirtHEIGHT - grassHEIGHT, Color.GREEN);
         // Adding the platforms
-        platforms.add(new Platform(100, 310, Color.YELLOW));
-        platforms.add(new Platform(600, 310, Color.YELLOW));
-        platforms.add(new Platform(1200, 310, Color.YELLOW));
+        setupLevel1();
         // Adding the enemies
         enemies.add(new Enemy(440));
         enemies.add(new Enemy(590));
@@ -96,6 +94,20 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         gui.addKeyListener(this);
         gui.addMouseListener(this);
         gui.addMouseMotionListener(this);
+    }
+
+    public void setupLevel1()
+    {
+        platforms.add(new Platform(100, 310, Color.YELLOW));
+        platforms.add(new Platform(600, 310, Color.YELLOW));
+        platforms.add(new Platform(1200, 310, Color.YELLOW));
+        platforms.add(new Platform(1600, 310, Color.YELLOW));
+        platforms.add(new Platform(1900, 210, Color.YELLOW));
+        platforms.add(new Platform(2700, 310, Color.YELLOW));
+        platforms.add(new Platform(3400, 310, Color.YELLOW));
+        platforms.add(new Platform(4000, 310, Color.YELLOW));
+        platforms.add(new Platform(4300, 210, Color.YELLOW));
+        platforms.add(new Platform(5000, 310, Color.YELLOW));
     }
 
     public void keyPressed(KeyEvent e)
@@ -224,16 +236,27 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
 
     private void drawPlayer(Graphics2D g2d)
     {
-        int pWidth = player.getWidth() + 80;
-        int pHeight = player.getHeight() + 20;
-        int y = player.getY();
-        ImageIcon playerIcon;
-        if(!powerupActive)
-            playerIcon = new ImageIcon(Game.class.getResource("Images/aron.png"));
-        else
-            playerIcon = new ImageIcon(Game.class.getResource("Images/poweredaron.png"));
-        Image player = playerIcon.getImage();
-        g2d.drawImage(player, WIDTH/4 - pWidth/2, y - 10, pWidth, pHeight, null);
+        if(!isGameOver)
+        {
+            int pWidth = player.getWidth() + 80;
+            int pHeight = player.getHeight() + 20;
+
+            int netWidth = 80;
+            int netHeight = 50;
+            int y = player.getY();
+
+            ImageIcon playerIcon;
+            if(!powerupActive)
+                playerIcon = new ImageIcon(Game.class.getResource("Images/aron.png"));
+            else
+                playerIcon = new ImageIcon(Game.class.getResource("Images/poweredaron.png"));
+            Image player = playerIcon.getImage();
+            g2d.drawImage(player, WIDTH / 4 - pWidth / 2, y - 10, pWidth, pHeight, null);
+
+            ImageIcon netIcon = new ImageIcon(Game.class.getResource("Images/jellynet.png"));
+            Image net = netIcon.getImage();
+            g2d.drawImage(net, WIDTH / 4 - pWidth / 2 - 20, y - 10, netWidth, netHeight, null);
+        }
     }
 
     private void drawFloatingScores(Graphics g)
@@ -246,12 +269,14 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
 
     private void drawScorebox(Graphics g)
     {
-        g.setColor(Color.GRAY);
-        g.fillRect(scoreboxX, scoreboxY, scoreboxWIDTH, scoreboxHEIGHT);
+        g.setColor(Color.BLACK);
+        g.fillRoundRect(scoreboxX - 2, scoreboxY - 2, scoreboxWIDTH + 4, scoreboxHEIGHT + 4, 20, 20);
+        g.setColor(Color.WHITE);
+        g.fillRoundRect(scoreboxX, scoreboxY, scoreboxWIDTH, scoreboxHEIGHT, 20, 20);
         Font font = new Font("Arial", Font.BOLD, scoreboxFontSize);
         g.setFont(font);
         g.setColor(Color.BLACK);
-        g.drawString("Score = " + score, scoreboxX + 5, scoreboxY + 40);
+        g.drawString("Score: " + score, scoreboxX + 5, scoreboxY + 35);
     }
     private void drawHearts(Graphics2D g2d)
     {
@@ -272,6 +297,15 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         {
             g2d.drawImage(heart, 30, 30, 40, 40, null);
         }
+    }
+
+    public void drawMenu(Graphics2D g2d)
+    {
+        g2d.setColor(Color.GRAY);
+        g2d.fillRect(0, 0, WIDTH, HEIGHT);
+        Font font = new Font("AR Darling", Font.BOLD, 100);
+        g2d.setColor(Color.WHITE);
+        g2d.drawString("Jellyfish Jam", WIDTH/2 - 250, HEIGHT/2 - 150);
     }
 
     public void drawLossScene(Graphics g2d, long currentTime)
