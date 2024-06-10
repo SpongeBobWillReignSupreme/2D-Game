@@ -72,7 +72,7 @@ public class Player extends JComponent
         {
             if(!isJumping && vY == 0)
             {
-                vY = -30;
+                vY = -18;
                 isJumping = true;
                 onPlat = false;
             }
@@ -134,6 +134,7 @@ public class Player extends JComponent
         //System.out.println(vY);
 
         //use a loop to go through all the platforms in plats and check if this is true for any of them.  If so exit loop.
+        boolean dropped = false;
         for(int i = 0; i < plats.size(); i++)
         {
             Platform plat = plats.get(i);
@@ -169,9 +170,10 @@ public class Player extends JComponent
                 pY = floor - pH;
                 isJumping = false;
             }
-            else if (!onPlat)
+            else if (!onPlat&&!dropped)
             {
                 vY++;
+                dropped = true;
             }
         }
     }

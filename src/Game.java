@@ -27,7 +27,7 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
     private static final long powerupDuration = 8000;
     private static final int fireBallCooldown = 800;
     private static final int interval = 100;
-    private static final int gameTimer = 180000;
+    private static final int gameTimer = 90000;
     //private static final AudioClip fireBall = Applet.newAudioClip(Game.class.getResource("fire-spell.wav"));
 
     // INSTANCE VARIABLES
@@ -50,6 +50,14 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
     private long lastFootstepTime = 0;
     private long infot;
     private long gameStartTime;
+    private int mouseX;
+    private int mouseY;
+    private int mouseDiam;
+    // SCENES
+    private boolean onMenu;
+    private boolean onLevelSelect;
+    private boolean onLevel1;
+    private boolean onLevel2;
 
     public Game()
     {
@@ -59,25 +67,19 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
 
     private void initializeGame()
     {
-        // Adding regular jellies
-        regJellies.add(new Jellyfish(180, defaultJellyfishY));
-        regJellies.add(new Jellyfish(680, defaultJellyfishY));
-        // Adding blue jellies
-        blueJellies.add(new BlueJellyfish(400, defaultJellyfishY));
-        // Adding the plats for the ground
-        dirt = new Platform(0, dirtHEIGHT, WIDTH, HEIGHT, new Color(87, 52, 41));
-        grass = new Platform(0, grassHEIGHT, WIDTH, dirtHEIGHT - grassHEIGHT, Color.GREEN);
-        // Adding the platforms
-        setupLevel1();
-        // Adding the enemies
-        enemies.add(new Enemy(440));
-        enemies.add(new Enemy(590));
-        enemies.add(new Enemy(1490));
         // Initializing the player lives to 3
         playerLives = livesLeft;
         // Initializing powerupActive to false
         powerupActive = false;
         isGameOver = false;
+        mouseX = -10;
+        mouseY = -10;
+        mouseDiam = 10;
+        onMenu = true;
+        onLevelSelect = false;
+        onLevel1 = false;
+        onLevel2 = false;
+        setupLevel();
     }
 
     private void setupGUI()
@@ -94,20 +96,6 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         gui.addKeyListener(this);
         gui.addMouseListener(this);
         gui.addMouseMotionListener(this);
-    }
-
-    public void setupLevel1()
-    {
-        platforms.add(new Platform(100, 310, Color.YELLOW));
-        platforms.add(new Platform(600, 310, Color.YELLOW));
-        platforms.add(new Platform(1200, 310, Color.YELLOW));
-        platforms.add(new Platform(1600, 310, Color.YELLOW));
-        platforms.add(new Platform(1900, 210, Color.YELLOW));
-        platforms.add(new Platform(2700, 310, Color.YELLOW));
-        platforms.add(new Platform(3400, 310, Color.YELLOW));
-        platforms.add(new Platform(4000, 310, Color.YELLOW));
-        platforms.add(new Platform(4300, 210, Color.YELLOW));
-        platforms.add(new Platform(5000, 310, Color.YELLOW));
     }
 
     public void keyPressed(KeyEvent e)
@@ -134,14 +122,86 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         }
     }
 
+    public void setupLevel()
+    {
+        if(!isGameOver && !onMenu && !onLevelSelect)
+        {
+            if(onLevel1)
+            {
+                // Adding regular jellies
+                regJellies.add(new Jellyfish(180, defaultJellyfishY));
+                regJellies.add(new Jellyfish(680, defaultJellyfishY));
+                regJellies.add(new Jellyfish(1280, defaultJellyfishY));
+                regJellies.add(new Jellyfish(1680, defaultJellyfishY));
+                regJellies.add(new Jellyfish(2780, defaultJellyfishY));
+                regJellies.add(new Jellyfish(3480, defaultJellyfishY));
+                regJellies.add(new Jellyfish(4080, defaultJellyfishY));
+                regJellies.add(new Jellyfish(5080, defaultJellyfishY));
+                regJellies.add(new Jellyfish(5680, defaultJellyfishY));
+                regJellies.add(new Jellyfish(6180, defaultJellyfishY));
+                regJellies.add(new Jellyfish(7180, defaultJellyfishY));
+                regJellies.add(new Jellyfish(7680, defaultJellyfishY));
+                regJellies.add(new Jellyfish(8480, defaultJellyfishY));
+                regJellies.add(new Jellyfish(9380, defaultJellyfishY));
+                // Adding blue jellies
+                blueJellies.add(new BlueJellyfish(400, defaultJellyfishY));
+                blueJellies.add(new BlueJellyfish(1980, 150));
+                blueJellies.add(new BlueJellyfish(4380, 150));
+                blueJellies.add(new BlueJellyfish(6480, 150));
+                blueJellies.add(new BlueJellyfish(8780, 150));
+                // Adding the platforms
+                platforms.add(new Platform(100, 310, Color.YELLOW));
+                platforms.add(new Platform(600, 310, Color.YELLOW));
+                platforms.add(new Platform(1200, 310, Color.YELLOW));
+                platforms.add(new Platform(1600, 310, Color.YELLOW));
+                platforms.add(new Platform(1900, 210, Color.YELLOW));
+                platforms.add(new Platform(2700, 310, Color.YELLOW));
+                platforms.add(new Platform(3400, 310, Color.YELLOW));
+                platforms.add(new Platform(4000, 310, Color.YELLOW));
+                platforms.add(new Platform(4300, 210, Color.YELLOW));
+                platforms.add(new Platform(5000, 310, Color.YELLOW));
+                platforms.add(new Platform(5600, 310, Color.YELLOW));
+                platforms.add(new Platform(6100, 310, Color.YELLOW));
+                platforms.add(new Platform(6400, 210, Color.YELLOW));
+                platforms.add(new Platform(7100, 310, Color.YELLOW));
+                platforms.add(new Platform(7600, 310, Color.YELLOW));
+                platforms.add(new Platform(8400, 310, Color.YELLOW));
+                platforms.add(new Platform(8700, 210, Color.YELLOW));
+                platforms.add(new Platform(9300, 310, Color.YELLOW));
+                // Adding the enemies
+                enemies.add(new Enemy(440));
+                enemies.add(new Enemy(700));
+                enemies.add(new Enemy(1490));
+                enemies.add(new Enemy(2200));
+                enemies.add(new Enemy(3000));
+                enemies.add(new Enemy(3800));
+                enemies.add(new Enemy(4600));
+                enemies.add(new Enemy(5100));
+                enemies.add(new Enemy(5900));
+                enemies.add(new Enemy(6500));
+                enemies.add(new Enemy(7100));
+                enemies.add(new Enemy(7700));
+                enemies.add(new Enemy(8300));
+                enemies.add(new Enemy(8800));
+                enemies.add(new Enemy(9400));
+            }
+            else if(onLevel2)
+            {
+
+            }
+            // Adding the plats for the ground
+
+        }
+        dirt = new Platform(0, dirtHEIGHT, WIDTH, HEIGHT, new Color(87, 52, 41));
+        grass = new Platform(0, grassHEIGHT, WIDTH, dirtHEIGHT - grassHEIGHT, Color.GREEN);
+    }
+
     public void paintComponent(Graphics g)
     {
-
         long currentTime = System.currentTimeMillis();
         // For images
         Graphics2D g2d;
         g2d = (Graphics2D)g;
-
         // Regular shapes
         drawBackground(g2d);
         drawGround(g);
@@ -155,6 +215,8 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         drawScorebox(g);
         drawHearts(g2d);
         drawLossScene(g, currentTime);
+        drawMenu(g2d);
+        drawLevelSelect(g2d);
     }
 
     private void drawBackground(Graphics g2d)
@@ -299,15 +361,6 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         }
     }
 
-    public void drawMenu(Graphics2D g2d)
-    {
-        g2d.setColor(Color.GRAY);
-        g2d.fillRect(0, 0, WIDTH, HEIGHT);
-        Font font = new Font("AR Darling", Font.BOLD, 100);
-        g2d.setColor(Color.WHITE);
-        g2d.drawString("Jellyfish Jam", WIDTH/2 - 250, HEIGHT/2 - 150);
-    }
-
     public void drawLossScene(Graphics g2d, long currentTime)
     {
         if(isGameOver)
@@ -347,6 +400,61 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
                 g2d.setColor(Color.WHITE);
                 g2d.drawString("You Won", WIDTH/2 - 200, HEIGHT/2 + 100);
             }
+        }
+    }
+    public void drawMenu(Graphics2D g2d)
+    {
+        if(onMenu)
+        {
+            // Adding Title
+            g2d.setColor(Color.GRAY);
+            g2d.fillRect(0, 0, WIDTH, HEIGHT);
+            Font font = new Font("Times New Roman", Font.BOLD, 100);
+            g2d.setFont(font);
+            g2d.setColor(Color.WHITE);
+            g2d.drawString("Jellyfish Jam", WIDTH/2 - 275, HEIGHT/2 - 90);
+
+            // Adding play button
+            g2d.setColor(Color.BLACK);
+            g2d.fillRoundRect(WIDTH/2 - 105, HEIGHT/2 - 55, 210, 85, 20, 20);
+            g2d.setColor(Color.WHITE);
+            g2d.fillRoundRect(WIDTH/2 - 100, HEIGHT/2 - 50, 200, 75, 20, 20);
+            g2d.setColor(Color.BLACK);
+            Font font2 = new Font("Arial", Font.BOLD, 50);
+            g2d.setFont(font2);
+            g2d.drawString("Play", WIDTH/2 - 57, HEIGHT/2 + 5);
+
+            // Adding quit button
+            g2d.setColor(Color.BLACK);
+            g2d.fillRoundRect(WIDTH/2 - 105, HEIGHT - HEIGHT/4 - 5, 210, 85, 20, 20);
+            g2d.setColor(Color.WHITE);
+            g2d.fillRoundRect(WIDTH/2 - 100, HEIGHT - HEIGHT/4, 200, 75, 20, 20);
+            g2d.setColor(Color.BLACK);
+            g2d.drawString("Quit", WIDTH/2 - 58, HEIGHT - HEIGHT/4 + 55);
+        }
+    }
+    public void drawLevelSelect(Graphics2D g2d)
+    {
+        if(onLevelSelect)
+        {
+            g2d.setColor(Color.GRAY);
+            g2d.fillRect(0, 0, WIDTH, HEIGHT);
+
+            // Drawing the select title
+            Font font = new Font("Times New Roman", Font.BOLD, 100);
+            g2d.setFont(font);
+            g2d.setColor(Color.WHITE);
+            g2d.drawString("Select Level", WIDTH / 2 - 260, HEIGHT / 2 - 95);
+
+            // Drawing the level 1 button
+            g2d.setColor(Color.BLACK);
+            g2d.fillRoundRect(WIDTH/2 - 105, HEIGHT/2 - 50, 210, 85, 20, 20);
+            g2d.setColor(Color.WHITE);
+            g2d.fillRoundRect(WIDTH/2 - 100, HEIGHT/2 - 45, 200, 75, 20, 20);
+            g2d.setColor(Color.BLACK);
+            Font font2 = new Font("Arial", Font.BOLD, 50);
+            g2d.setFont(font2);
+            g2d.drawString("Level 1", WIDTH/2 - 83, HEIGHT/2 + 10);
         }
     }
 
@@ -422,7 +530,7 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         for(int i = 0; i < enemies.size(); i++)
         {
             Enemy enemy = enemies.get(i);
-            enemy.enemyMove((int)(Math.random() * 101) + 150);
+            enemy.enemyMove();
             if(player.getColor().equals(Color.ORANGE))
             {
                 if(enemy.checkTouch(player))
@@ -554,7 +662,34 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
     public void keyTyped(KeyEvent e) {}
     public void mousePressed(MouseEvent e) {}
     public void mouseReleased(MouseEvent e) {}
-    public void mouseClicked(MouseEvent e) {}
+    public void mouseClicked(MouseEvent e)
+    {
+        mouseX = e.getX();
+        mouseY = e.getY();
+
+        if(onMenu)
+        {
+            if(mouseX >= WIDTH / 2 - 105 && mouseX <= WIDTH / 2 + 105 && mouseY >= HEIGHT / 2 - 55 && mouseY <= HEIGHT / 2 + 30)
+            {
+                onLevelSelect = true;
+                onMenu = false;
+            }
+
+            if (mouseX >= WIDTH / 2 - 105 && mouseX <= WIDTH + 105 && mouseY >= HEIGHT - HEIGHT / 4 - 5 && mouseY <= HEIGHT - HEIGHT / 4 + 80)
+            {
+                System.exit(0);
+            }
+        }
+        else if(onLevelSelect)
+        {
+            if(mouseX >= WIDTH/2 - 105 && mouseX <= WIDTH/2 + 105 && mouseY >= HEIGHT/2 - 50 && mouseY <= HEIGHT/2 + 35)
+            {
+                onLevelSelect = false;
+                onLevel1 = true;
+                setupLevel();
+            }
+        }
+    }
     public void mouseEntered(MouseEvent e) {}
     public void mouseExited(MouseEvent e) {}
     public void mouseMoved(MouseEvent e) {}

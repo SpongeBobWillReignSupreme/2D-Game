@@ -35,18 +35,18 @@ public class Enemy
     public int getWidth() { return eW; }
     public int getHeight() { return eH; }
 
-    public void enemyMove(int randomMove)
+    public void enemyMove()
     {
-        if(moveCount < randomMove)
+        if(moveCount < 200)
         {
             eX += vX;
             moveCount++;
         }
-        if(moveCount >= randomMove)
+        if(moveCount >= 200)
         {
             eX -= vX;
             moveCount++;
-            if(moveCount == randomMove + 200)
+            if(moveCount == 400)
                 moveCount = 0;
         }
     }
