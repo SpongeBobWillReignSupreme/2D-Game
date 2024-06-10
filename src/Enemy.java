@@ -35,18 +35,18 @@ public class Enemy
     public int getWidth() { return eW; }
     public int getHeight() { return eH; }
 
-    public void enemyMove()
+    public void enemyMove(int randomMove)
     {
-        if(moveCount < 200)
+        if(moveCount < randomMove)
         {
             eX += vX;
             moveCount++;
         }
-        if(moveCount >= 200)
+        if(moveCount >= randomMove)
         {
             eX -= vX;
             moveCount++;
-            if(moveCount == 400)
+            if(moveCount == randomMove + 200)
                 moveCount = 0;
         }
     }
@@ -100,6 +100,6 @@ public class Enemy
     public void drawEnemy(Graphics g2d, Image enemy, int screenWIDTH, Player p, ImageObserver obs)
     {
         int distToPlayerX = eX - p.getX();
-        g2d.drawImage(enemy, screenWIDTH/4 - p.getWidth()/2 + distToPlayerX, eY, eW, eH, obs);
+        g2d.drawImage(enemy, screenWIDTH/4 - p.getWidth()/2 + distToPlayerX, eY - 10, eW + 20, eH + 20, obs);
     }
 }

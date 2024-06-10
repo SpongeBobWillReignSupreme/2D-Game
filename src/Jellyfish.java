@@ -28,12 +28,6 @@ public class Jellyfish
         g.setColor(col);
         g.fillOval(jX, jY, diam, diam);
     }
-    public void drawSelf (Graphics g, int screenWIDTH, Player p)
-    {
-        g.setColor(col);
-        int distToPlayerX = jX - p.getX();
-        g.fillOval(screenWIDTH/4 - p.getWidth()/2 + distToPlayerX, jY, diam, diam);
-    }
 
     public boolean checkCatch(Player p)
     {
@@ -45,5 +39,10 @@ public class Jellyfish
         {
             return false; // We didn't touch
         }
+    }
+    public void drawSelf(Graphics g2d, Image jelly, int screenWIDTH, Player p)
+    {
+        int distToPlayerX = jX - p.getX();
+        g2d.drawImage(jelly, screenWIDTH/4 - p.getWidth()/2 + distToPlayerX, jY, diam, diam, null);
     }
 }

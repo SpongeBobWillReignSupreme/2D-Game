@@ -27,6 +27,7 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
     private static final long powerupDuration = 8000;
     private static final int fireBallCooldown = 800;
     private static final int interval = 100;
+    private static final int gameTimer = 180000;
     //private static final AudioClip fireBall = Applet.newAudioClip(Game.class.getResource("fire-spell.wav"));
 
     // INSTANCE VARIABLES
@@ -48,6 +49,7 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
     private boolean isGameOver;
     private long lastFootstepTime = 0;
     private long infot;
+    private long gameStartTime;
 
     public Game()
     {
@@ -122,6 +124,8 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
 
     public void paintComponent(Graphics g)
     {
+
+        long currentTime = System.currentTimeMillis();
         // For images
         Graphics2D g2d;
         g2d = (Graphics2D)g;
@@ -138,7 +142,7 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         drawFloatingScores(g);
         drawScorebox(g);
         drawHearts(g2d);
-        drawLossScene(g);
+        drawLossScene(g, currentTime);
     }
 
     private void drawBackground(Graphics g2d)
@@ -160,19 +164,23 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         }
     }
 
-    private void drawJellyfishes(Graphics g)
+    private void drawJellyfishes(Graphics g2d)
     {
         if(!isGameOver)
         {
             // Drawing regular jellies
-            for (Jellyfish jellyfish : regJellies)
+            ImageIcon jellyIcon = new ImageIcon(Game.class.getResource("Images/jelly.png"));
+            Image jelly = jellyIcon.getImage();
+            for (Jellyfish j : regJellies)
             {
-                jellyfish.drawSelf(g, WIDTH, player);
+                j.drawSelf(g2d, jelly, WIDTH, player);
             }
             // Drawing blue jellies
-            for (BlueJellyfish blueJellyfish : blueJellies)
+            ImageIcon blueJellyIcon = new ImageIcon(Game.class.getResource("Images/bluejelly.png"));
+            Image blueJelly = blueJellyIcon.getImage();
+            for (BlueJellyfish blueJ : blueJellies)
             {
-                blueJellyfish.drawSelf(g, WIDTH, player);
+                blueJ.drawSelf(g2d, blueJelly,WIDTH, player);
             }
         }
     }
@@ -219,7 +227,11 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         int pWidth = player.getWidth() + 80;
         int pHeight = player.getHeight() + 20;
         int y = player.getY();
-        ImageIcon playerIcon = new ImageIcon(Game.class.getResource("Images/aron.png"));
+        ImageIcon playerIcon;
+        if(!powerupActive)
+            playerIcon = new ImageIcon(Game.class.getResource("Images/aron.png"));
+        else
+            playerIcon = new ImageIcon(Game.class.getResource("Images/poweredaron.png"));
         Image player = playerIcon.getImage();
         g2d.drawImage(player, WIDTH/4 - pWidth/2, y - 10, pWidth, pHeight, null);
     }
@@ -262,16 +274,45 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         }
     }
 
-    public void drawLossScene(Graphics g)
+    public void drawLossScene(Graphics g2d, long currentTime)
     {
         if(isGameOver)
         {
-            g.setColor(Color.GRAY);
-            g.fillRect(0, 0, WIDTH, HEIGHT);
-            Font font = new Font("AR Darling", Font.BOLD, 100);
-            g.setFont(font);
-            g.setColor(Color.WHITE);
-            g.drawString("Game Over", WIDTH/2 - 250, HEIGHT/2);
+            if(playerLives <= 0)
+            {
+                ImageIcon lossPage = new ImageIcon(Game.class.getResource("Images/loss.png"));
+                Image loss = lossPage.getImage();
+                g2d.drawImage(loss, 0, 0, WIDTH, HEIGHT, null);
+                Font font = new Font("AR Darling", Font.BOLD, 100);
+                g2d.setFont(font);
+                g2d.setColor(Color.WHITE);
+                g2d.drawString("Game Over", WIDTH/2 - 250, HEIGHT/2 - 150);
+                Font font2 = new Font("AR Darling", Font.BOLD, 25);
+                g2d.setFont(font2);
+                g2d.drawString("You Ran Out Of Lives", WIDTH/2 - 140, HEIGHT/2 + 100);
+            }
+            else if(currentTime - gameStartTime > gameTimer)
+            {
+                ImageIcon lossPage = new ImageIcon(Game.class.getResource("Images/loss.png"));
+                Image loss = lossPage.getImage();
+                g2d.drawImage(loss, 0, 0, WIDTH, HEIGHT, null);
+                g2d.setColor(Color.GRAY);
+                g2d.fillRect(0, 0, WIDTH, HEIGHT);
+                Font font = new Font("AR Darling", Font.BOLD, 100);
+                g2d.setFont(font);
+                g2d.setColor(Color.WHITE);
+                g2d.drawString("Game Over", WIDTH/2 - 250, HEIGHT/2 - 150);
+                Font font2 = new Font("AR Darling", Font.PLAIN, 25);
+                g2d.setFont(font2);
+                g2d.drawString("You Ran Out Of Time", WIDTH/2 - 200, HEIGHT/2 + 100);
+            }
+            else
+            {
+                Font font = new Font("AR Darling", Font.BOLD, 100);
+                g2d.setFont(font);
+                g2d.setColor(Color.WHITE);
+                g2d.drawString("You Won", WIDTH/2 - 200, HEIGHT/2 + 100);
+            }
         }
     }
 
@@ -299,6 +340,7 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
                 i--;
                 score += 100;
                 floatingScores.add(new FloatingScore("+100", jellyfish.getX() + jellyfish.getDiam()/2, jellyfish.getY()));
+                playSound("beep.wav");
             }
         }
         for(int i = 0; i < blueJellies.size(); i++)
@@ -310,6 +352,8 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
                 i--;
                 score += 200;
                 floatingScores.add(new FloatingScore("+200", blueJellyfish.getbJX() + blueJellyfish.getDiam()/2, blueJellyfish.getY()));
+                floatingScores.add(new FloatingScore("POWERED UP!", player.getX(), player.getY()));
+                playSound("beep.wav");
                 player.setColor(Color.BLUE);
                 powerupActive = true;
                 powerupStartTime = currentTime;
@@ -344,7 +388,7 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         for(int i = 0; i < enemies.size(); i++)
         {
             Enemy enemy = enemies.get(i);
-            enemy.enemyMove();
+            enemy.enemyMove((int)(Math.random() * 101) + 150);
             if(player.getColor().equals(Color.ORANGE))
             {
                 if(enemy.checkTouch(player))

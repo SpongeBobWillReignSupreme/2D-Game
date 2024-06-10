@@ -40,10 +40,9 @@ public class BlueJellyfish
             return false; // We didn't touch
         }
     }
-    public void drawSelf (Graphics g, int screenWIDTH, Player p)
+    public void drawSelf(Graphics g2d, Image blueJelly, int screenWIDTH, Player p)
     {
-        g.setColor(col);
         int distToPlayerX = bJX - p.getX();
-        g.fillOval(screenWIDTH/4 - p.getWidth()/2 + distToPlayerX, bJY, diam, diam);
+        g2d.drawImage(blueJelly, screenWIDTH/4 - p.getWidth()/2 + distToPlayerX, bJY, diam, diam, null);
     }
 }
