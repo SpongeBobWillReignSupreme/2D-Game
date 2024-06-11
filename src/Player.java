@@ -1,5 +1,8 @@
 package src;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -22,6 +25,7 @@ public class Player extends JComponent
     private Color color;
     private boolean movingLeft;
     private boolean movingRight;
+    private long startSound;
 
     //Default Constructor
     public Player()
@@ -55,16 +59,27 @@ public class Player extends JComponent
 
     public void movePlayer(KeyEvent e)
     {
+        long currentTime = System.currentTimeMillis();
         int key = e.getKeyCode();
         if(key == 65) // Left
         {
-            vX = -10;
+            vX = -7;
+            if(currentTime - startSound > 200 && !isJumping)
+            {
+                playSound("step.wav");
+                startSound = currentTime;
+            }
             movingLeft = true;
             movingRight = false;
         }
         if(key == 68) // Right
         {
-            vX = 10;
+            vX = 7;
+            if(currentTime - startSound > 200 && !isJumping)
+            {
+                playSound("step.wav");
+                startSound = currentTime;
+            }
             movingRight = true;
             movingLeft = false;
         }
@@ -91,42 +106,7 @@ public class Player extends JComponent
             vX = 0;
         }
     }
-    public void movement(int floor, Platform plat, KeyEvent e)
-    {
-        pX += vX;
-        pY += vY;
-        System.out.println(vY);
 
-
-        if(vY > 0 && pY + pH >= plat.getY() && pY + pH <= plat.getY() + plat.getHeight() && (pX >= plat.getX() && pX <= plat.getX() + plat.getWidth() - 5 || pX + pW >= plat.getX() + 5 && pX + pW <= plat.getX() + plat.getWidth()))
-        {
-            vY = 0;
-            pY = plat.getY() - pH;
-            isJumping = false;
-            onPlat = true;
-        }
-        else
-            onPlat = false;
-
-        if(pY + pH >= floor && !onPlat)//landing on the floor
-        {
-            //System.out.println("on floor");
-            vY = 0;
-            pY = floor - pH;
-            isJumping = false;
-        }
-
-        else if(!onPlat)
-        {
-            vY++;
-        }
-
-        int key = e.getKeyCode();
-        if(key != 37 && key != 39 && pY + pH >= floor);
-        {
-            vX = 0;
-        }
-    }
     public void movement(int floor, ArrayList<Platform> plats)
     {
         pX += vX;
@@ -163,7 +143,7 @@ public class Player extends JComponent
             {
                 //System.out.println("on floor");
                 vY = 0;
-                if(vX != -10 && vX != 10)
+                if(vX != -7 && vX != 7)
                 {
                     vX = 0;
                 }
@@ -176,6 +156,30 @@ public class Player extends JComponent
                 dropped = true;
             }
         }
+    }
+
+    public static synchronized void playSound(final String url)
+    {
+        new Thread(new Runnable()
+        {
+            // The wrapper thread is unnecessary, unless it blocks on the
+            // Clip finishing; see comments.
+            public void run()
+            {
+                try
+                {
+                    Clip clip = AudioSystem.getClip();
+                    AudioInputStream inputStream = AudioSystem.getAudioInputStream(
+                            Game.class.getResourceAsStream("/src/SoundEffects/" + url));
+                    clip.open(inputStream);
+                    clip.start();
+                }
+                catch (Exception e)
+                {
+                    System.err.println(e.getMessage());
+                }
+            }
+        }).start();
     }
 
     public void drawPlayer(Graphics g, int screenWIDTH)

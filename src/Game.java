@@ -24,7 +24,7 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
     private static final int defaultJellyfishY = 250;
     private static final int TICKS = 60;
     private static final long lifeLostDelay = 2100;
-    private static final long powerupDuration = 8000;
+    private static final long powerupDuration = 5000;
     private static final int fireBallCooldown = 800;
     private static final int interval = 100;
     private static final int gameTimer = 90000;
@@ -397,6 +397,7 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
                 Font font2 = new Font("Arial", Font.BOLD, 25);
                 g2d.setFont(font2);
                 g2d.drawString("You Ran Out Of Lives", WIDTH/2 - 140, HEIGHT/2 - 100);
+                g2d.drawString("Score: " + score, WIDTH/2 - 60, HEIGHT/2 - 50);
 
                 // Adding try again button
                 g2d.setColor(Color.BLACK);
@@ -428,7 +429,8 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
                 g2d.drawString("Game Over", WIDTH/2 - 275, HEIGHT/2 - 150);
                 Font font2 = new Font("Arial", Font.BOLD, 25);
                 g2d.setFont(font2);
-                g2d.drawString("You Ran Out Of Time", WIDTH/2 - 140, HEIGHT/2 - 100);
+                g2d.drawString("You Ran Out Of Time", WIDTH/2 - 145, HEIGHT/2 - 100);
+                g2d.drawString("Score: " + score, WIDTH/2 - 60, HEIGHT/2 - 50);
 
                 // Adding try again button
                 g2d.setColor(Color.BLACK);
@@ -455,9 +457,12 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
                 Image win = winPage.getImage();
                 g2d.drawImage(win, 0, 0, WIDTH, HEIGHT, null);
                 Font font = new Font("Times New Roman", Font.BOLD, 100);
+                Font font2 = new Font("Arial", Font.BOLD, 50);
                 g2d.setFont(font);
-                g2d.setColor(Color.WHITE);
-                g2d.drawString("You Won", WIDTH/2 - 200, HEIGHT/2 - 150);
+                g2d.setColor(Color.PINK);
+                g2d.drawString("You Won", WIDTH/2 - 220, HEIGHT/2 - 150);
+                g2d.setFont(font2);
+                g2d.drawString("Score: " + score, WIDTH/2 - 160, HEIGHT/2 - 80);
 
                 // Adding play again button
                 g2d.setColor(Color.BLACK);
@@ -465,8 +470,7 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
                 g2d.setColor(Color.WHITE);
                 g2d.fillRoundRect(WIDTH/2 - 138, HEIGHT/2 - 50, 240, 75, 20, 20);
                 g2d.setColor(Color.BLACK);
-                Font font3 = new Font("Arial", Font.BOLD, 50);
-                g2d.setFont(font3);
+                g2d.setFont(font2);
                 g2d.drawString("Try Again", WIDTH/2 - 133, HEIGHT/2 + 5);
 
                 // Adding quit button
@@ -475,7 +479,7 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
                 g2d.setColor(Color.WHITE);
                 g2d.fillRoundRect(WIDTH/2 - 100, HEIGHT/2 + 60, 165, 75, 20, 20);
                 g2d.setColor(Color.BLACK);
-                g2d.setFont(font3);
+                g2d.setFont(font2);
                 g2d.drawString("Quit", WIDTH/2 - 73, HEIGHT/2 + 115);
             }
         }
@@ -665,6 +669,7 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
             player.setColor(Color.RED);
             score -= 50;
             floatingScores.add(new FloatingScore("-50", player.getX() + player.getWidth()/2, player.getY()));
+            playSound("gethit.wav");
             playerLives--;
             lastLifeLostTime = currentTime;
         }
