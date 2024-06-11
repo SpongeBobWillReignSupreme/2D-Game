@@ -627,19 +627,19 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
             Font font3 = new Font("Arial", Font.BOLD, 30);
             g2d.setFont(font3);
             g2d.setColor(Color.BLACK);
-            g2d.fillRoundRect(WIDTH/4 - 205, HEIGHT - HEIGHT/2 - 50, 270, 70, 20, 20);
+            g2d.fillRoundRect(WIDTH/4 - 225, HEIGHT - HEIGHT/2 - 50, 290, 70, 20, 20);
             g2d.setColor(Color.GRAY);
-            g2d.fillRoundRect(WIDTH/4 - 200, HEIGHT - HEIGHT/2 - 45, 260, 60, 20, 20);
+            g2d.fillRoundRect(WIDTH/4 - 220, HEIGHT - HEIGHT/2 - 45, 280, 60, 20, 20);
             g2d.setColor(Color.BLACK);
-            g2d.drawString("High Score: " + highScore, WIDTH/4 - 190, HEIGHT - HEIGHT/2);
+            g2d.drawString("High Score: " + highScore, WIDTH/4 - 210, HEIGHT - HEIGHT/2);
 
             // Adding score score
             g2d.setColor(Color.BLACK);
-            g2d.fillRoundRect(WIDTH/2 + 180, HEIGHT - HEIGHT/2 - 50, 270, 70, 20, 20);
+            g2d.fillRoundRect(WIDTH/2 + 180, HEIGHT - HEIGHT/2 - 50, 290, 70, 20, 20);
             g2d.setColor(Color.GRAY);
-            g2d.fillRoundRect(WIDTH/2 + 185, HEIGHT - HEIGHT/2 - 45, 260, 60, 20, 20);
+            g2d.fillRoundRect(WIDTH/2 + 185, HEIGHT - HEIGHT/2 - 45, 280, 60, 20, 20);
             g2d.setColor(Color.BLACK);
-            g2d.drawString("Total Score: " + totalScore, WIDTH/2 + 190, HEIGHT - HEIGHT/2);
+            g2d.drawString("Total Score: " + totalScore, WIDTH/2 + 210, HEIGHT - HEIGHT/2);
         }
     }
     public void drawLevelSelect(Graphics2D g2d)
@@ -731,19 +731,19 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
             Font font3 = new Font("Arial", Font.BOLD, 30);
             g2d.setFont(font3);
             g2d.setColor(Color.BLACK);
-            g2d.fillRoundRect(WIDTH/4 - 205, HEIGHT - HEIGHT/2 - 50, 270, 70, 20, 20);
+            g2d.fillRoundRect(WIDTH/4 - 225, HEIGHT - HEIGHT/2 - 50, 290, 70, 20, 20);
             g2d.setColor(Color.GRAY);
-            g2d.fillRoundRect(WIDTH/4 - 200, HEIGHT - HEIGHT/2 - 45, 260, 60, 20, 20);
+            g2d.fillRoundRect(WIDTH/4 - 220, HEIGHT - HEIGHT/2 - 45, 280, 60, 20, 20);
             g2d.setColor(Color.BLACK);
-            g2d.drawString("High Score: " + highScore, WIDTH/4 - 190, HEIGHT - HEIGHT/2);
+            g2d.drawString("High Score: " + highScore, WIDTH/4 - 210, HEIGHT - HEIGHT/2);
 
             // Adding score score
             g2d.setColor(Color.BLACK);
-            g2d.fillRoundRect(WIDTH/2 + 180, HEIGHT - HEIGHT/2 - 50, 270, 70, 20, 20);
+            g2d.fillRoundRect(WIDTH/2 + 180, HEIGHT - HEIGHT/2 - 50, 290, 70, 20, 20);
             g2d.setColor(Color.GRAY);
-            g2d.fillRoundRect(WIDTH/2 + 185, HEIGHT - HEIGHT/2 - 45, 260, 60, 20, 20);
+            g2d.fillRoundRect(WIDTH/2 + 185, HEIGHT - HEIGHT/2 - 45, 280, 60, 20, 20);
             g2d.setColor(Color.BLACK);
-            g2d.drawString("Total Score: " + totalScore, WIDTH/2 + 190, HEIGHT - HEIGHT/2);
+            g2d.drawString("Total Score: " + totalScore, WIDTH/2 + 210, HEIGHT - HEIGHT/2);
         }
     }
 
