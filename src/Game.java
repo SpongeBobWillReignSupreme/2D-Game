@@ -639,7 +639,7 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
             g2d.setColor(Color.GRAY);
             g2d.fillRoundRect(WIDTH/2 + 185, HEIGHT - HEIGHT/2 - 45, 280, 60, 20, 20);
             g2d.setColor(Color.BLACK);
-            g2d.drawString("Total Score: " + totalScore, WIDTH/2 + 210, HEIGHT - HEIGHT/2);
+            g2d.drawString("Total Score: " + totalScore, WIDTH/2 + 190, HEIGHT - HEIGHT/2);
         }
     }
     public void drawLevelSelect(Graphics2D g2d)
@@ -743,7 +743,7 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
             g2d.setColor(Color.GRAY);
             g2d.fillRoundRect(WIDTH/2 + 185, HEIGHT - HEIGHT/2 - 45, 280, 60, 20, 20);
             g2d.setColor(Color.BLACK);
-            g2d.drawString("Total Score: " + totalScore, WIDTH/2 + 210, HEIGHT - HEIGHT/2);
+            g2d.drawString("Total Score: " + totalScore, WIDTH/2 + 190, HEIGHT - HEIGHT/2);
         }
     }
 
