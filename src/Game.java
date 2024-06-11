@@ -187,7 +187,7 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
                 platforms.add(new Platform(8700, 210, Color.YELLOW));
                 platforms.add(new Platform(9300, 310, Color.YELLOW));
                 // Adding the enemies
-                enemies.add(new Enemy(440, 349));
+                enemies.add(new Enemy(440));
                 enemies.add(new Enemy(700));
                 enemies.add(new Enemy(1490));
                 enemies.add(new Enemy(2200));
