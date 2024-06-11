@@ -37,17 +37,35 @@ public class Enemy
 
     public void enemyMove()
     {
-        if(moveCount < 200)
+        if(eY == 389)
         {
-            eX += vX;
-            moveCount++;
+            if(moveCount < 200)
+            {
+                eX += vX;
+                moveCount++;
+            }
+            if(moveCount >= 200)
+            {
+                eX -= vX;
+                moveCount++;
+                if (moveCount == 400)
+                    moveCount = 0;
+            }
         }
-        if(moveCount >= 200)
+        else
         {
-            eX -= vX;
-            moveCount++;
-            if(moveCount == 400)
-                moveCount = 0;
+            if(moveCount < 100)
+            {
+                eX += vX;
+                moveCount++;
+            }
+            if(moveCount >= 100)
+            {
+                eX -= vX;
+                moveCount++;
+                if (moveCount == 200)
+                    moveCount = 0;
+            }
         }
     }
     public boolean checkStomp(Player p)

@@ -37,7 +37,6 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
     private static final int reachEndX = 10000;
     private static final String SCORE_FILE_PATH = "score.txt";
     private static final String PURCHASE_STATE_FILE_PATH = "purchase_state.txt";
-    //private static final AudioClip fireBall = Applet.newAudioClip(Game.class.getResource("fire-spell.wav"));
 
     // INSTANCE VARIABLES
     private ArrayList<Jellyfish> regJellies = new ArrayList<>();
@@ -207,19 +206,28 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
             else if(onLevel2)
             {
                 // Adding regular jellies
-                regJellies.add(new Jellyfish(100, defaultJellyfishY));
-                regJellies.add(new Jellyfish(300, defaultJellyfishY));
-                regJellies.add(new Jellyfish(500, defaultJellyfishY));
-                regJellies.add(new Jellyfish(700, defaultJellyfishY));
-                regJellies.add(new Jellyfish(900, defaultJellyfishY));
-                regJellies.add(new Jellyfish(1100, defaultJellyfishY));
-                regJellies.add(new Jellyfish(1300, defaultJellyfishY));
-                regJellies.add(new Jellyfish(1500, defaultJellyfishY));
-                regJellies.add(new Jellyfish(1700, defaultJellyfishY));
-                regJellies.add(new Jellyfish(1900, defaultJellyfishY));
+                regJellies.add(new Jellyfish(180, defaultJellyfishY)); // On platform at (100, 310)
+                regJellies.add(new Jellyfish(480, 150)); // On platform at (400, 210)
+                regJellies.add(new Jellyfish(880, defaultJellyfishY)); // On platform at (800, 310)
+                regJellies.add(new Jellyfish(1780, 50));               // On platform at (1700, 110)
+                regJellies.add(new Jellyfish(1380, defaultJellyfishY));// On platform at (1300, 310)
+                regJellies.add(new Jellyfish(2280, 150));              // On platform at (2200, 210)
+                regJellies.add(new Jellyfish(2580, defaultJellyfishY));// On platform at (2700, 310)
+                regJellies.add(new Jellyfish(3280, defaultJellyfishY));// On platform at (3200, 310)
+                regJellies.add(new Jellyfish(3680, 150));              // On platform at (3600, 210)
+                regJellies.add(new Jellyfish(4380, 50));               // On platform at (4300, 110)
+                regJellies.add(new Jellyfish(5180, 150));              // On platform at (5100, 210)
+                regJellies.add(new Jellyfish(5580, defaultJellyfishY));// On platform at (5500, 310)
+                regJellies.add(new Jellyfish(6280, defaultJellyfishY));// On platform at (6200, 310)
+                regJellies.add(new Jellyfish(7080, 150));              // On platform at (7000, 210)
+                regJellies.add(new Jellyfish(8180, 150));              // On platform at (8100, 210)
+                regJellies.add(new Jellyfish(8880, 50));               // On platform at (8800, 110)
+                regJellies.add(new Jellyfish(9280, defaultJellyfishY));// On platform at (9200, 310)
+                regJellies.add(new Jellyfish(9680, 150));              // On platform at (9600, 210)
+                regJellies.add(new Jellyfish(10080, defaultJellyfishY));// On platform at (10000, 310)
 
                 // Adding blue jellies
-                blueJellies.add(new BlueJellyfish(7600, defaultJellyfishY)); // One blue jellyfish towards the end
+                blueJellies.add(new BlueJellyfish(7778, defaultJellyfishY)); // One blue jellyfish towards the end
 
                 // Adding the platforms
                 platforms.add(new Platform(100, 310, Color.YELLOW));
@@ -227,35 +235,60 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
                 platforms.add(new Platform(800, 310, Color.YELLOW));
                 platforms.add(new Platform(800, 110, Color.YELLOW));
                 platforms.add(new Platform(1700, 110, Color.YELLOW));
-                platforms.add(new Platform(1100, 310, Color.YELLOW));
                 platforms.add(new Platform(1300, 310, Color.YELLOW));
-                platforms.add(new Platform(1500, 310, Color.YELLOW));
-                platforms.add(new Platform(1700, 310, Color.YELLOW));
-                platforms.add(new Platform(1900, 310, Color.YELLOW));
-                platforms.add(new Platform(1900, 310, Color.YELLOW));
-                platforms.add(new Platform(1900, 310, Color.YELLOW));
-                platforms.add(new Platform(1900, 310, Color.YELLOW));
-                platforms.add(new Platform(1900, 310, Color.YELLOW));
-                platforms.add(new Platform(1900, 310, Color.YELLOW));
-                platforms.add(new Platform(1900, 310, Color.YELLOW));
-                platforms.add(new Platform(1900, 310, Color.YELLOW));
-                platforms.add(new Platform(1900, 310, Color.YELLOW));
-                platforms.add(new Platform(1900, 310, Color.YELLOW));
-                platforms.add(new Platform(1900, 310, Color.YELLOW));
-                platforms.add(new Platform(1900, 310, Color.YELLOW));
-                platforms.add(new Platform(1900, 310, Color.YELLOW));
+                platforms.add(new Platform(2200, 210, Color.YELLOW));
+                platforms.add(new Platform(2500, 310, Color.YELLOW));
+                platforms.add(new Platform(2900, 110, Color.YELLOW));
+                platforms.add(new Platform(3200, 310, Color.YELLOW));
+                platforms.add(new Platform(3600, 210, Color.YELLOW));
+                platforms.add(new Platform(4000, 310, Color.YELLOW));
+                platforms.add(new Platform(4300, 110, Color.YELLOW));
+                platforms.add(new Platform(4700, 310, Color.YELLOW));
+                platforms.add(new Platform(5100, 210, Color.YELLOW));
+                platforms.add(new Platform(5500, 310, Color.YELLOW));
+                platforms.add(new Platform(5800, 110, Color.YELLOW));
+                platforms.add(new Platform(6200, 310, Color.YELLOW));
+                platforms.add(new Platform(6600, 210, Color.YELLOW));
+                platforms.add(new Platform(7000, 310, Color.YELLOW));
+                platforms.add(new Platform(7300, 110, Color.YELLOW));
+                platforms.add(new Platform(7700, 310, Color.YELLOW));
+                platforms.add(new Platform(8100, 210, Color.YELLOW));
+                platforms.add(new Platform(8500, 310, Color.YELLOW));
+                platforms.add(new Platform(8800, 110, Color.YELLOW));
+                platforms.add(new Platform(9200, 310, Color.YELLOW));
+                platforms.add(new Platform(9600, 210, Color.YELLOW));
+                platforms.add(new Platform(10000, 310, Color.YELLOW));
 
                 // Adding the enemies
-                enemies.add(new Enemy(200));
-                enemies.add(new Enemy(400));
-                enemies.add(new Enemy(600));
-                enemies.add(new Enemy(800));
-                enemies.add(new Enemy(1000));
-                enemies.add(new Enemy(1200));
-                enemies.add(new Enemy(1400));
-                enemies.add(new Enemy(1600));
-                enemies.add(new Enemy(1800));
-                enemies.add(new Enemy(2000));
+                enemies.add(new Enemy(200));      // Ground
+                enemies.add(new Enemy(400));      // Ground
+                enemies.add(new Enemy(120, 254)); // On platform at (100, 310) - Centered: 100 + (200/2) - (40/2)
+                enemies.add(new Enemy(850));      // Ground
+                enemies.add(new Enemy(820, 54));  // On platform at (800, 110) - Centered: 800 + (200/2) - (40/2)
+                enemies.add(new Enemy(1320, 254));// On platform at (1300, 310) - Centered: 1300 + (200/2) - (40/2)
+                enemies.add(new Enemy(1800));     // Ground
+                enemies.add(new Enemy(2300));     // Ground
+                enemies.add(new Enemy(2520, 254));// On platform at (2500, 310) - Centered: 2500 + (200/2) - (40/2)
+                enemies.add(new Enemy(3000));     // Ground
+                enemies.add(new Enemy(3300));     // Ground
+                enemies.add(new Enemy(3620, 154));// On platform at (3600, 210) - Centered: 3600 + (200/2) - (40/2)
+                enemies.add(new Enemy(4100));     // Ground
+                enemies.add(new Enemy(4400));     // Ground
+                enemies.add(new Enemy(4720, 254));// On platform at (4700, 310) - Centered: 4700 + (200/2) - (40/2)
+                enemies.add(new Enemy(5200));     // Ground
+                enemies.add(new Enemy(5520, 254));// On platform at (5500, 310) - Centered: 5500 + (200/2) - (40/2)
+                enemies.add(new Enemy(5900));     // Ground
+                enemies.add(new Enemy(6300));     // Ground
+                enemies.add(new Enemy(6620, 154));// On platform at (6600, 210) - Centered: 6600 + (200/2) - (40/2)
+                enemies.add(new Enemy(7100));     // Ground
+                enemies.add(new Enemy(7400));     // Ground
+                enemies.add(new Enemy(7720, 254));// On platform at (7700, 310) - Centered: 7700 + (200/2) - (40/2)
+                enemies.add(new Enemy(8120, 154));// On platform at (8100, 210) - Centered: 8100 + (200/2) - (40/2)
+                enemies.add(new Enemy(8600));     // Ground
+                enemies.add(new Enemy(8900));     // Ground
+                enemies.add(new Enemy(9220, 254));// On platform at (9200, 310) - Centered: 9200 + (200/2) - (40/2)
+                enemies.add(new Enemy(9620, 154));// On platform at (9600, 210) - Centered: 9600 + (200/2) - (40/2)
+                enemies.add(new Enemy(10100));    // Ground
             }
         }
         dirt = new Platform(0, dirtHEIGHT, WIDTH, HEIGHT, new Color(87, 52, 41));
@@ -763,7 +796,6 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
                     player.setColor(Color.BLUE);
                     powerupActive = true;
                     powerupStartTime = currentTime;
-                    System.out.println("Got powerup!");
                 }
             }
             if(currentTime - powerupStartTime > powerupDuration && powerupActive)
@@ -806,8 +838,6 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
                     if(enemy.checkTouch(player))
                     {
                         handlePlayerTouchedByEnemy(currentTime);
-                        System.out.println("Player lives: " + playerLives);
-                        System.out.println("poop");
                     }
                     if(enemy.checkStomp(player))
                     {
@@ -816,7 +846,6 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
                         floatingScores.add(new FloatingScore("+50", enemy.getX() + enemy.getWidth() / 2, enemy.getY()));
                         playSound("beep.wav");
                         player.setColor(Color.ORANGE);
-                        System.out.println("true " + player.getX() + " " + player.getY() + " " + enemy.getX() + " " + enemy.getY() + " " + player.getIsJumping() + " " + player.getOnPlat() + " " + player.getVY() + "\n");
                     }
                     else
                     {
@@ -824,7 +853,6 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
                         {
                             player.setColor(Color.ORANGE);
                             infot = currentTime;
-                            System.out.println("false " + player.getX() + " " + player.getY() + " " + enemy.getX() + " " + enemy.getY() + " " + player.getIsJumping() + " " + player.getOnPlat() + " " + player.getVY() + "\n");
                         }
                     }
                 }
@@ -1064,6 +1092,40 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
     public void mouseMoved(MouseEvent e) {}
     public void mouseDragged(MouseEvent e) {}
 
+
+    private void restartGame()
+    {
+        // Reset the game state
+        loadScores();
+        loadPurchaseState();
+        isGameOver = false;
+        onMenu = true;
+        onLevelSelect = false;
+        onLevel1 = false;
+        onLevel2 = false;
+        gameWon = false;
+        onShop = false;
+        playerLives = livesLeft;
+        powerupActive = false;
+        mouseX = -10;
+        mouseY = -10;
+        mouseDiam = 10;
+
+        // Clear all game objects
+        regJellies.clear();
+        blueJellies.clear();
+        platforms.clear();
+        enemies.clear();
+        fireBalls.clear();
+        floatingScores.clear();
+
+        // Reset player state
+        player = new Player();
+
+        // Setup the level again
+        setupLevel();
+    }
+
     private void loadScores()
     {
         try
@@ -1133,38 +1195,5 @@ public class Game extends JComponent implements KeyListener, MouseListener, Mous
         {
             System.err.println("Error writing purchase state file: " + e.getMessage());
         }
-    }
-
-    private void restartGame()
-    {
-        // Reset the game state
-        loadScores();
-        loadPurchaseState();
-        isGameOver = false;
-        onMenu = true;
-        onLevelSelect = false;
-        onLevel1 = false;
-        onLevel2 = false;
-        gameWon = false;
-        onShop = false;
-        playerLives = livesLeft;
-        powerupActive = false;
-        mouseX = -10;
-        mouseY = -10;
-        mouseDiam = 10;
-
-        // Clear all game objects
-        regJellies.clear();
-        blueJellies.clear();
-        platforms.clear();
-        enemies.clear();
-        fireBalls.clear();
-        floatingScores.clear();
-
-        // Reset player state
-        player = new Player();
-
-        // Setup the level again
-        setupLevel();
     }
 }
