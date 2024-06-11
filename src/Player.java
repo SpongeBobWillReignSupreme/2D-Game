@@ -4,6 +4,8 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.*;
+import java.applet.Applet;
+import java.applet.AudioClip;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -26,6 +28,7 @@ public class Player extends JComponent
     private boolean movingLeft;
     private boolean movingRight;
     private long startSound;
+    private AudioClip footstep = Applet.newAudioClip(Game.class.getResource("SoundEffects/footstep.wav"));
 
     //Default Constructor
     public Player()
@@ -66,8 +69,13 @@ public class Player extends JComponent
             vX = -7;
             if(currentTime - startSound > 200 && !isJumping)
             {
-                playSound("step.wav");
+                footstep.play();
+                //playSound("step.wav");
                 startSound = currentTime;
+            }
+            else
+            {
+                footstep.stop();
             }
             movingLeft = true;
             movingRight = false;
@@ -77,8 +85,13 @@ public class Player extends JComponent
             vX = 7;
             if(currentTime - startSound > 200 && !isJumping)
             {
-                playSound("step.wav");
+                footstep.play();
+                //playSound("step.wav");
                 startSound = currentTime;
+            }
+            else
+            {
+                footstep.stop();
             }
             movingRight = true;
             movingLeft = false;
